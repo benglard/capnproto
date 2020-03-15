@@ -584,6 +584,16 @@ private:
 //     Array<char> bar = KJ_MAP(c, foo) -> char { return c + 1; };
 //     KJ_ASSERT(str(bar) == "bcde");
 
+#define KJ_INDEX_MAP(index, elementName, array) \
+  ::kj::_::IndexedMapper<KJ_DECLTYPE_REF(array)>(array) * \
+  [&](typename ::kj::_::IndexedMapper<KJ_DECLTYPE_REF(array)>::Element elementName, size_t index)
+// Applies some function to every element of an array, returning an Array of the results,  with
+// nice syntax.  Example:
+//
+//     StringPtr foo = "abcd";
+//     Array<char> bar = KJ_INDEX_MAP(i, c, foo) -> char { return c + 1; };
+//     KJ_ASSERT(str(bar) == "bcde");
+
 namespace _ {  // private
 
 template <typename T>
@@ -595,6 +605,22 @@ struct Mapper {
     auto builder = heapArrayBuilder<decltype(func(*array.begin()))>(array.size());
     for (auto iter = array.begin(); iter != array.end(); ++iter) {
       builder.add(func(*iter));
+    }
+    return builder.finish();
+  }
+  typedef decltype(*kj::instance<T>().begin()) Element;
+};
+
+template <typename T>
+struct IndexedMapper {
+  T array;
+  IndexedMapper(T&& array): array(kj::fwd<T>(array)) {}
+  template <typename Func>
+  auto operator*(Func&& func) -> Array<decltype(func(*array.begin(), 0))> {
+    auto builder = heapArrayBuilder<decltype(func(*array.begin(), 0))>(array.size());
+    size_t i{0};
+    for (auto iter = array.begin(); iter != array.end(); ++iter) {
+      builder.add(func(*iter, i++));
     }
     return builder.finish();
   }
