@@ -62,7 +62,6 @@ namespace {
 
 static constexpr uint64_t NAMESPACE_ANNOTATION_ID = 0xb9c6f99ebf805f2cull;
 static constexpr uint64_t NAME_ANNOTATION_ID = 0xf264a779fef191ceull;
-static constexpr int64_t DEFAULT_MEMBER_INDEX = -1;
 
 kj::StringTree docToCodeComment(capnp::Text::Reader text) {
   kj::StringTree docComment{};
