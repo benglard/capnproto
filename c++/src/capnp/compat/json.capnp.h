@@ -158,11 +158,14 @@ public:
   inline bool hasArray() const;
   inline  ::capnp::List< ::capnp::json::Value,  ::capnp::Kind::STRUCT>::Reader getArray() const;
 
-  // Standard JSON values.
   inline bool isObject() const;
   inline bool hasObject() const;
   inline  ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>::Reader getObject() const;
+  // Standard JSON values.
 
+  inline bool isCall() const;
+  inline bool hasCall() const;
+  inline  ::capnp::json::Value::Call::Reader getCall() const;
   // Non-standard: A "function call", applying a named function (named by a single identifier)
   // to a parameter list. Examples:
   //
@@ -173,9 +176,6 @@ public:
   // "binary" and "date" types in text, since JSON has no analog of these. This is basically the
   // reason this extension exists. We do NOT recommend using `call` unless you specifically need
   // to be compatible with some silly format that uses this syntax.
-  inline bool isCall() const;
-  inline bool hasCall() const;
-  inline  ::capnp::json::Value::Call::Reader getCall() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -234,7 +234,6 @@ public:
   inline void adoptArray(::capnp::Orphan< ::capnp::List< ::capnp::json::Value,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::json::Value,  ::capnp::Kind::STRUCT>> disownArray();
 
-  // Standard JSON values.
   inline bool isObject();
   inline bool hasObject();
   inline  ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>::Builder getObject();
@@ -242,7 +241,15 @@ public:
   inline  ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>::Builder initObject(unsigned int size);
   inline void adoptObject(::capnp::Orphan< ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>> disownObject();
+  // Standard JSON values.
 
+  inline bool isCall();
+  inline bool hasCall();
+  inline  ::capnp::json::Value::Call::Builder getCall();
+  inline void setCall( ::capnp::json::Value::Call::Reader value);
+  inline  ::capnp::json::Value::Call::Builder initCall();
+  inline void adoptCall(::capnp::Orphan< ::capnp::json::Value::Call>&& value);
+  inline ::capnp::Orphan< ::capnp::json::Value::Call> disownCall();
   // Non-standard: A "function call", applying a named function (named by a single identifier)
   // to a parameter list. Examples:
   //
@@ -253,13 +260,6 @@ public:
   // "binary" and "date" types in text, since JSON has no analog of these. This is basically the
   // reason this extension exists. We do NOT recommend using `call` unless you specifically need
   // to be compatible with some silly format that uses this syntax.
-  inline bool isCall();
-  inline bool hasCall();
-  inline  ::capnp::json::Value::Call::Builder getCall();
-  inline void setCall( ::capnp::json::Value::Call::Reader value);
-  inline  ::capnp::json::Value::Call::Builder initCall();
-  inline void adoptCall(::capnp::Orphan< ::capnp::json::Value::Call>&& value);
-  inline ::capnp::Orphan< ::capnp::json::Value::Call> disownCall();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -487,9 +487,9 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Optional: Adds the given prefix to flattened field names.
   inline bool hasPrefix() const;
   inline  ::capnp::Text::Reader getPrefix() const;
+  // Optional: Adds the given prefix to flattened field names.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -519,13 +519,13 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Optional: Adds the given prefix to flattened field names.
   inline bool hasPrefix();
   inline  ::capnp::Text::Builder getPrefix();
   inline void setPrefix( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initPrefix(unsigned int size);
   inline void adoptPrefix(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownPrefix();
+  // Optional: Adds the given prefix to flattened field names.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -570,17 +570,17 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // The name of the discriminator field. Defaults to matching the name of the union.
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
+  // The name of the discriminator field. Defaults to matching the name of the union.
 
+  inline bool hasValueName() const;
+  inline  ::capnp::Text::Reader getValueName() const;
   // If non-null, specifies that the union's value shall have the given field name, rather than the
   // value's name. In this case the union's variant can only be determined by looking at the
   // discriminant field, not by inspecting which value field is present.
   //
   // It is an error to use `valueName` while also declaring some variants as $flatten.
-  inline bool hasValueName() const;
-  inline  ::capnp::Text::Reader getValueName() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -610,25 +610,25 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // The name of the discriminator field. Defaults to matching the name of the union.
   inline bool hasName();
   inline  ::capnp::Text::Builder getName();
   inline void setName( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initName(unsigned int size);
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
+  // The name of the discriminator field. Defaults to matching the name of the union.
 
-  // If non-null, specifies that the union's value shall have the given field name, rather than the
-  // value's name. In this case the union's variant can only be determined by looking at the
-  // discriminant field, not by inspecting which value field is present.
-  //
-  // It is an error to use `valueName` while also declaring some variants as $flatten.
   inline bool hasValueName();
   inline  ::capnp::Text::Builder getValueName();
   inline void setValueName( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initValueName(unsigned int size);
   inline void adoptValueName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownValueName();
+  // If non-null, specifies that the union's value shall have the given field name, rather than the
+  // value's name. In this case the union's variant can only be determined by looking at the
+  // discriminant field, not by inspecting which value field is present.
+  //
+  // It is an error to use `valueName` while also declaring some variants as $flatten.
 
 private:
   ::capnp::_::StructBuilder _builder;

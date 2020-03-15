@@ -670,6 +670,9 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  inline bool isUnimplemented() const;
+  inline bool hasUnimplemented() const;
+  inline  ::capnp::rpc::Message::Reader getUnimplemented() const;
   // The sender previously received this message from the peer but didn't understand it or doesn't
   // yet implement the functionality that was requested.  So, the sender is echoing the message
   // back.  In some cases, the receiver may be able to recover from this by pretending the sender
@@ -686,81 +689,78 @@ public:
   // In cases where there is no sensible way to react to an `unimplemented` message (without
   // resource leaks or other serious problems), the connection may need to be aborted.  This is
   // a gray area; different implementations may take different approaches.
-  inline bool isUnimplemented() const;
-  inline bool hasUnimplemented() const;
-  inline  ::capnp::rpc::Message::Reader getUnimplemented() const;
 
+  inline bool isAbort() const;
+  inline bool hasAbort() const;
+  inline  ::capnp::rpc::Exception::Reader getAbort() const;
   // Sent when a connection is being aborted due to an unrecoverable error.  This could be e.g.
   // because the sender received an invalid or nonsensical message or because the sender had an
   // internal error.  The sender will shut down the outgoing half of the connection after `abort`
   // and will completely close the connection shortly thereafter (it's up to the sender how much
   // of a time buffer they want to offer for the client to receive the `abort` before the
   // connection is reset).
-  inline bool isAbort() const;
-  inline bool hasAbort() const;
-  inline  ::capnp::rpc::Exception::Reader getAbort() const;
 
-  // Begin a method call.
   inline bool isCall() const;
   inline bool hasCall() const;
   inline  ::capnp::rpc::Call::Reader getCall() const;
+  // Begin a method call.
 
-  // Complete a method call.
   inline bool isReturn() const;
   inline bool hasReturn() const;
   inline  ::capnp::rpc::Return::Reader getReturn() const;
+  // Complete a method call.
 
-  // Release a returned answer / cancel a call.
   inline bool isFinish() const;
   inline bool hasFinish() const;
   inline  ::capnp::rpc::Finish::Reader getFinish() const;
+  // Release a returned answer / cancel a call.
 
-  // Resolve a previously-sent promise.
   inline bool isResolve() const;
   inline bool hasResolve() const;
   inline  ::capnp::rpc::Resolve::Reader getResolve() const;
+  // Resolve a previously-sent promise.
 
-  // Release a capability so that the remote object can be deallocated.
   inline bool isRelease() const;
   inline bool hasRelease() const;
   inline  ::capnp::rpc::Release::Reader getRelease() const;
+  // Release a capability so that the remote object can be deallocated.
 
-  // Obsolete request to save a capability, resulting in a SturdyRef. This has been replaced
-  // by the `Persistent` interface defined in `persistent.capnp`. This operation was never
-  // implemented.
   inline bool isObsoleteSave() const;
   inline bool hasObsoleteSave() const;
   inline ::capnp::AnyPointer::Reader getObsoleteSave() const;
+  // Obsolete request to save a capability, resulting in a SturdyRef. This has been replaced
+  // by the `Persistent` interface defined in `persistent.capnp`. This operation was never
+  // implemented.
 
-  // Request the peer's bootstrap interface.
   inline bool isBootstrap() const;
   inline bool hasBootstrap() const;
   inline  ::capnp::rpc::Bootstrap::Reader getBootstrap() const;
+  // Request the peer's bootstrap interface.
 
-  // Obsolete way to delete a SturdyRef. This operation was never implemented.
   inline bool isObsoleteDelete() const;
   inline bool hasObsoleteDelete() const;
   inline ::capnp::AnyPointer::Reader getObsoleteDelete() const;
+  // Obsolete way to delete a SturdyRef. This operation was never implemented.
 
-  // Provide a capability to a third party.
   inline bool isProvide() const;
   inline bool hasProvide() const;
   inline  ::capnp::rpc::Provide::Reader getProvide() const;
+  // Provide a capability to a third party.
 
-  // Accept a capability provided by a third party.
   inline bool isAccept() const;
   inline bool hasAccept() const;
   inline  ::capnp::rpc::Accept::Reader getAccept() const;
+  // Accept a capability provided by a third party.
 
-  // Directly connect to the common root of two or more proxied caps.
   inline bool isJoin() const;
   inline bool hasJoin() const;
   inline  ::capnp::rpc::Join::Reader getJoin() const;
+  // Directly connect to the common root of two or more proxied caps.
 
-  // Lift an embargo used to enforce E-order over promise resolution.
   inline bool isDisembargo() const;
   inline bool hasDisembargo() const;
   inline  ::capnp::rpc::Disembargo::Reader getDisembargo() const;
+  // Lift an embargo used to enforce E-order over promise resolution.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -791,6 +791,13 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  inline bool isUnimplemented();
+  inline bool hasUnimplemented();
+  inline  ::capnp::rpc::Message::Builder getUnimplemented();
+  inline void setUnimplemented( ::capnp::rpc::Message::Reader value);
+  inline  ::capnp::rpc::Message::Builder initUnimplemented();
+  inline void adoptUnimplemented(::capnp::Orphan< ::capnp::rpc::Message>&& value);
+  inline ::capnp::Orphan< ::capnp::rpc::Message> disownUnimplemented();
   // The sender previously received this message from the peer but didn't understand it or doesn't
   // yet implement the functionality that was requested.  So, the sender is echoing the message
   // back.  In some cases, the receiver may be able to recover from this by pretending the sender
@@ -807,20 +814,7 @@ public:
   // In cases where there is no sensible way to react to an `unimplemented` message (without
   // resource leaks or other serious problems), the connection may need to be aborted.  This is
   // a gray area; different implementations may take different approaches.
-  inline bool isUnimplemented();
-  inline bool hasUnimplemented();
-  inline  ::capnp::rpc::Message::Builder getUnimplemented();
-  inline void setUnimplemented( ::capnp::rpc::Message::Reader value);
-  inline  ::capnp::rpc::Message::Builder initUnimplemented();
-  inline void adoptUnimplemented(::capnp::Orphan< ::capnp::rpc::Message>&& value);
-  inline ::capnp::Orphan< ::capnp::rpc::Message> disownUnimplemented();
 
-  // Sent when a connection is being aborted due to an unrecoverable error.  This could be e.g.
-  // because the sender received an invalid or nonsensical message or because the sender had an
-  // internal error.  The sender will shut down the outgoing half of the connection after `abort`
-  // and will completely close the connection shortly thereafter (it's up to the sender how much
-  // of a time buffer they want to offer for the client to receive the `abort` before the
-  // connection is reset).
   inline bool isAbort();
   inline bool hasAbort();
   inline  ::capnp::rpc::Exception::Builder getAbort();
@@ -828,8 +822,13 @@ public:
   inline  ::capnp::rpc::Exception::Builder initAbort();
   inline void adoptAbort(::capnp::Orphan< ::capnp::rpc::Exception>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Exception> disownAbort();
+  // Sent when a connection is being aborted due to an unrecoverable error.  This could be e.g.
+  // because the sender received an invalid or nonsensical message or because the sender had an
+  // internal error.  The sender will shut down the outgoing half of the connection after `abort`
+  // and will completely close the connection shortly thereafter (it's up to the sender how much
+  // of a time buffer they want to offer for the client to receive the `abort` before the
+  // connection is reset).
 
-  // Begin a method call.
   inline bool isCall();
   inline bool hasCall();
   inline  ::capnp::rpc::Call::Builder getCall();
@@ -837,8 +836,8 @@ public:
   inline  ::capnp::rpc::Call::Builder initCall();
   inline void adoptCall(::capnp::Orphan< ::capnp::rpc::Call>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Call> disownCall();
+  // Begin a method call.
 
-  // Complete a method call.
   inline bool isReturn();
   inline bool hasReturn();
   inline  ::capnp::rpc::Return::Builder getReturn();
@@ -846,8 +845,8 @@ public:
   inline  ::capnp::rpc::Return::Builder initReturn();
   inline void adoptReturn(::capnp::Orphan< ::capnp::rpc::Return>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Return> disownReturn();
+  // Complete a method call.
 
-  // Release a returned answer / cancel a call.
   inline bool isFinish();
   inline bool hasFinish();
   inline  ::capnp::rpc::Finish::Builder getFinish();
@@ -855,8 +854,8 @@ public:
   inline  ::capnp::rpc::Finish::Builder initFinish();
   inline void adoptFinish(::capnp::Orphan< ::capnp::rpc::Finish>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Finish> disownFinish();
+  // Release a returned answer / cancel a call.
 
-  // Resolve a previously-sent promise.
   inline bool isResolve();
   inline bool hasResolve();
   inline  ::capnp::rpc::Resolve::Builder getResolve();
@@ -864,8 +863,8 @@ public:
   inline  ::capnp::rpc::Resolve::Builder initResolve();
   inline void adoptResolve(::capnp::Orphan< ::capnp::rpc::Resolve>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Resolve> disownResolve();
+  // Resolve a previously-sent promise.
 
-  // Release a capability so that the remote object can be deallocated.
   inline bool isRelease();
   inline bool hasRelease();
   inline  ::capnp::rpc::Release::Builder getRelease();
@@ -873,16 +872,16 @@ public:
   inline  ::capnp::rpc::Release::Builder initRelease();
   inline void adoptRelease(::capnp::Orphan< ::capnp::rpc::Release>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Release> disownRelease();
+  // Release a capability so that the remote object can be deallocated.
 
-  // Obsolete request to save a capability, resulting in a SturdyRef. This has been replaced
-  // by the `Persistent` interface defined in `persistent.capnp`. This operation was never
-  // implemented.
   inline bool isObsoleteSave();
   inline bool hasObsoleteSave();
   inline ::capnp::AnyPointer::Builder getObsoleteSave();
   inline ::capnp::AnyPointer::Builder initObsoleteSave();
+  // Obsolete request to save a capability, resulting in a SturdyRef. This has been replaced
+  // by the `Persistent` interface defined in `persistent.capnp`. This operation was never
+  // implemented.
 
-  // Request the peer's bootstrap interface.
   inline bool isBootstrap();
   inline bool hasBootstrap();
   inline  ::capnp::rpc::Bootstrap::Builder getBootstrap();
@@ -890,14 +889,14 @@ public:
   inline  ::capnp::rpc::Bootstrap::Builder initBootstrap();
   inline void adoptBootstrap(::capnp::Orphan< ::capnp::rpc::Bootstrap>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Bootstrap> disownBootstrap();
+  // Request the peer's bootstrap interface.
 
-  // Obsolete way to delete a SturdyRef. This operation was never implemented.
   inline bool isObsoleteDelete();
   inline bool hasObsoleteDelete();
   inline ::capnp::AnyPointer::Builder getObsoleteDelete();
   inline ::capnp::AnyPointer::Builder initObsoleteDelete();
+  // Obsolete way to delete a SturdyRef. This operation was never implemented.
 
-  // Provide a capability to a third party.
   inline bool isProvide();
   inline bool hasProvide();
   inline  ::capnp::rpc::Provide::Builder getProvide();
@@ -905,8 +904,8 @@ public:
   inline  ::capnp::rpc::Provide::Builder initProvide();
   inline void adoptProvide(::capnp::Orphan< ::capnp::rpc::Provide>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Provide> disownProvide();
+  // Provide a capability to a third party.
 
-  // Accept a capability provided by a third party.
   inline bool isAccept();
   inline bool hasAccept();
   inline  ::capnp::rpc::Accept::Builder getAccept();
@@ -914,8 +913,8 @@ public:
   inline  ::capnp::rpc::Accept::Builder initAccept();
   inline void adoptAccept(::capnp::Orphan< ::capnp::rpc::Accept>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Accept> disownAccept();
+  // Accept a capability provided by a third party.
 
-  // Directly connect to the common root of two or more proxied caps.
   inline bool isJoin();
   inline bool hasJoin();
   inline  ::capnp::rpc::Join::Builder getJoin();
@@ -923,8 +922,8 @@ public:
   inline  ::capnp::rpc::Join::Builder initJoin();
   inline void adoptJoin(::capnp::Orphan< ::capnp::rpc::Join>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Join> disownJoin();
+  // Directly connect to the common root of two or more proxied caps.
 
-  // Lift an embargo used to enforce E-order over promise resolution.
   inline bool isDisembargo();
   inline bool hasDisembargo();
   inline  ::capnp::rpc::Disembargo::Builder getDisembargo();
@@ -932,6 +931,7 @@ public:
   inline  ::capnp::rpc::Disembargo::Builder initDisembargo();
   inline void adoptDisembargo(::capnp::Orphan< ::capnp::rpc::Disembargo>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Disembargo> disownDisembargo();
+  // Lift an embargo used to enforce E-order over promise resolution.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -976,10 +976,12 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId() const;
   // A new question ID identifying this request, which will eventually receive a Return message
   // containing the restored capability.
-  inline  ::uint32_t getQuestionId() const;
 
+  inline bool hasDeprecatedObjectId() const;
+  inline ::capnp::AnyPointer::Reader getDeprecatedObjectId() const;
   // ** DEPRECATED **
   //
   // A Vat may export multiple bootstrap interfaces. In this case, `deprecatedObjectId` specifies
@@ -1053,8 +1055,6 @@ public:
   // a user who can delete the image at any time. If the user deletes the image, the SturdyRef
   // stops working. On the other hand, if the SturdyRef is discarded, this has no effect on the
   // existence of the image in its collection.
-  inline bool hasDeprecatedObjectId() const;
-  inline ::capnp::AnyPointer::Reader getDeprecatedObjectId() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1084,11 +1084,14 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // A new question ID identifying this request, which will eventually receive a Return message
-  // containing the restored capability.
   inline  ::uint32_t getQuestionId();
   inline void setQuestionId( ::uint32_t value);
+  // A new question ID identifying this request, which will eventually receive a Return message
+  // containing the restored capability.
 
+  inline bool hasDeprecatedObjectId();
+  inline ::capnp::AnyPointer::Builder getDeprecatedObjectId();
+  inline ::capnp::AnyPointer::Builder initDeprecatedObjectId();
   // ** DEPRECATED **
   //
   // A Vat may export multiple bootstrap interfaces. In this case, `deprecatedObjectId` specifies
@@ -1162,9 +1165,6 @@ public:
   // a user who can delete the image at any time. If the user deletes the image, the SturdyRef
   // stops working. On the other hand, if the SturdyRef is discarded, this has no effect on the
   // existence of the image in its collection.
-  inline bool hasDeprecatedObjectId();
-  inline ::capnp::AnyPointer::Builder getDeprecatedObjectId();
-  inline ::capnp::AnyPointer::Builder initDeprecatedObjectId();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1209,6 +1209,7 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId() const;
   // A number, chosen by the caller, that identifies this call in future messages.  This number
   // must be different from all other calls originating from the same end of the connection (but
   // may overlap with question IDs originating from the opposite end).  A fine strategy is to use
@@ -1217,29 +1218,28 @@ public:
   // A question ID can be reused once both:
   // - A matching Return has been received from the callee.
   // - A matching Finish has been sent from the caller.
-  inline  ::uint32_t getQuestionId() const;
 
-  // The object that should receive this call.
   inline bool hasTarget() const;
   inline  ::capnp::rpc::MessageTarget::Reader getTarget() const;
+  // The object that should receive this call.
 
-  // The type ID of the interface being called.  Each capability may implement multiple interfaces.
   inline  ::uint64_t getInterfaceId() const;
+  // The type ID of the interface being called.  Each capability may implement multiple interfaces.
 
-  // The ordinal number of the method to call within the requested interface.
   inline  ::uint16_t getMethodId() const;
+  // The ordinal number of the method to call within the requested interface.
 
-  // The call parameters.  `params.content` is a struct whose fields correspond to the parameters of
-  // the method.
   inline bool hasParams() const;
   inline  ::capnp::rpc::Payload::Reader getParams() const;
+  // The call parameters.  `params.content` is a struct whose fields correspond to the parameters of
+  // the method.
 
   inline typename SendResultsTo::Reader getSendResultsTo() const;
 
+  inline bool getAllowThirdPartyTailCall() const;
   // Indicates whether or not the receiver is allowed to send a `Return` containing
   // `acceptFromThirdParty`.  Level 3 implementations should set this true.  Otherwise, the callee
   // will have to proxy the return in the case of a tail call to a third-party vat.
-  inline bool getAllowThirdPartyTailCall() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1269,6 +1269,8 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId();
+  inline void setQuestionId( ::uint32_t value);
   // A number, chosen by the caller, that identifies this call in future messages.  This number
   // must be different from all other calls originating from the same end of the connection (but
   // may overlap with question IDs originating from the opposite end).  A fine strategy is to use
@@ -1277,42 +1279,40 @@ public:
   // A question ID can be reused once both:
   // - A matching Return has been received from the callee.
   // - A matching Finish has been sent from the caller.
-  inline  ::uint32_t getQuestionId();
-  inline void setQuestionId( ::uint32_t value);
 
-  // The object that should receive this call.
   inline bool hasTarget();
   inline  ::capnp::rpc::MessageTarget::Builder getTarget();
   inline void setTarget( ::capnp::rpc::MessageTarget::Reader value);
   inline  ::capnp::rpc::MessageTarget::Builder initTarget();
   inline void adoptTarget(::capnp::Orphan< ::capnp::rpc::MessageTarget>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::MessageTarget> disownTarget();
+  // The object that should receive this call.
 
-  // The type ID of the interface being called.  Each capability may implement multiple interfaces.
   inline  ::uint64_t getInterfaceId();
   inline void setInterfaceId( ::uint64_t value);
+  // The type ID of the interface being called.  Each capability may implement multiple interfaces.
 
-  // The ordinal number of the method to call within the requested interface.
   inline  ::uint16_t getMethodId();
   inline void setMethodId( ::uint16_t value);
+  // The ordinal number of the method to call within the requested interface.
 
-  // The call parameters.  `params.content` is a struct whose fields correspond to the parameters of
-  // the method.
   inline bool hasParams();
   inline  ::capnp::rpc::Payload::Builder getParams();
   inline void setParams( ::capnp::rpc::Payload::Reader value);
   inline  ::capnp::rpc::Payload::Builder initParams();
   inline void adoptParams(::capnp::Orphan< ::capnp::rpc::Payload>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Payload> disownParams();
+  // The call parameters.  `params.content` is a struct whose fields correspond to the parameters of
+  // the method.
 
   inline typename SendResultsTo::Builder getSendResultsTo();
   inline typename SendResultsTo::Builder initSendResultsTo();
 
+  inline bool getAllowThirdPartyTailCall();
+  inline void setAllowThirdPartyTailCall(bool value);
   // Indicates whether or not the receiver is allowed to send a `Return` containing
   // `acceptFromThirdParty`.  Level 3 implementations should set this true.  Otherwise, the callee
   // will have to proxy the return in the case of a tail call to a third-party vat.
-  inline bool getAllowThirdPartyTailCall();
-  inline void setAllowThirdPartyTailCall(bool value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1361,10 +1361,12 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  // Send the return message back to the caller (the usual).
   inline bool isCaller() const;
   inline  ::capnp::Void getCaller() const;
+  // Send the return message back to the caller (the usual).
 
+  inline bool isYourself() const;
+  inline  ::capnp::Void getYourself() const;
   // **(level 1)**
   //
   // Don't actually return the results to the sender.  Instead, hold on to them and await
@@ -1401,9 +1403,10 @@ public:
   //   set in place of results.
   // - Vat A sends a `Finish` for the bar() call to Vat B.
   // - Vat B receives the `Finish` for bar() and sends a `Finish` for bar'().
-  inline bool isYourself() const;
-  inline  ::capnp::Void getYourself() const;
 
+  inline bool isThirdParty() const;
+  inline bool hasThirdParty() const;
+  inline ::capnp::AnyPointer::Reader getThirdParty() const;
   // **(level 3)**
   //
   // The call's result should be returned to a different vat.  The receiver (the callee) expects
@@ -1415,9 +1418,6 @@ public:
   // Vat B -> Vat A that contains `acceptFromThirdParty` in place of results.  When Vat A sends
   // an `Accept` to Vat C, it receives back a `Return` containing the call's actual result.  Vat C
   // also sends a `Return` to Vat B with `resultsSentElsewhere`.
-  inline bool isThirdParty() const;
-  inline bool hasThirdParty() const;
-  inline ::capnp::AnyPointer::Reader getThirdParty() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1448,11 +1448,14 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  // Send the return message back to the caller (the usual).
   inline bool isCaller();
   inline  ::capnp::Void getCaller();
   inline void setCaller( ::capnp::Void value = ::capnp::VOID);
+  // Send the return message back to the caller (the usual).
 
+  inline bool isYourself();
+  inline  ::capnp::Void getYourself();
+  inline void setYourself( ::capnp::Void value = ::capnp::VOID);
   // **(level 1)**
   //
   // Don't actually return the results to the sender.  Instead, hold on to them and await
@@ -1489,10 +1492,11 @@ public:
   //   set in place of results.
   // - Vat A sends a `Finish` for the bar() call to Vat B.
   // - Vat B receives the `Finish` for bar() and sends a `Finish` for bar'().
-  inline bool isYourself();
-  inline  ::capnp::Void getYourself();
-  inline void setYourself( ::capnp::Void value = ::capnp::VOID);
 
+  inline bool isThirdParty();
+  inline bool hasThirdParty();
+  inline ::capnp::AnyPointer::Builder getThirdParty();
+  inline ::capnp::AnyPointer::Builder initThirdParty();
   // **(level 3)**
   //
   // The call's result should be returned to a different vat.  The receiver (the callee) expects
@@ -1504,10 +1508,6 @@ public:
   // Vat B -> Vat A that contains `acceptFromThirdParty` in place of results.  When Vat A sends
   // an `Accept` to Vat C, it receives back a `Return` containing the call's actual result.  Vat C
   // also sends a `Return` to Vat B with `resultsSentElsewhere`.
-  inline bool isThirdParty();
-  inline bool hasThirdParty();
-  inline ::capnp::AnyPointer::Builder getThirdParty();
-  inline ::capnp::AnyPointer::Builder initThirdParty();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1553,9 +1553,10 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  // Equal to the QuestionId of the corresponding `Call` message.
   inline  ::uint32_t getAnswerId() const;
+  // Equal to the QuestionId of the corresponding `Call` message.
 
+  inline bool getReleaseParamCaps() const;
   // If true, all capabilities that were in the params should be considered released.  The sender
   // must not send separate `Release` messages for them.  Level 0 implementations in particular
   // should always set this true.  This defaults true because if level 0 implementations forget to
@@ -1564,8 +1565,10 @@ public:
   //
   // The receiver should act as if the sender had sent a release message with count=1 for each
   // CapDescriptor in the original Call message.
-  inline bool getReleaseParamCaps() const;
 
+  inline bool isResults() const;
+  inline bool hasResults() const;
+  inline  ::capnp::rpc::Payload::Reader getResults() const;
   // The result.
   //
   // For regular method calls, `results.content` points to the result struct.
@@ -1573,43 +1576,40 @@ public:
   // For a `Return` in response to an `Accept` or `Bootstrap`, `results` contains a single
   // capability (rather than a struct), and `results.content` is just a capability pointer with
   // index 0.  A `Finish` is still required in this case.
-  inline bool isResults() const;
-  inline bool hasResults() const;
-  inline  ::capnp::rpc::Payload::Reader getResults() const;
 
-  // Indicates that the call failed and explains why.
   inline bool isException() const;
   inline bool hasException() const;
   inline  ::capnp::rpc::Exception::Reader getException() const;
+  // Indicates that the call failed and explains why.
 
-  // Indicates that the call was canceled due to the caller sending a Finish message
-  // before the call had completed.
   inline bool isCanceled() const;
   inline  ::capnp::Void getCanceled() const;
+  // Indicates that the call was canceled due to the caller sending a Finish message
+  // before the call had completed.
 
+  inline bool isResultsSentElsewhere() const;
+  inline  ::capnp::Void getResultsSentElsewhere() const;
   // This is set when returning from a `Call` that had `sendResultsTo` set to something other
   // than `caller`.
   //
   // It doesn't matter too much when this is sent, as the receiver doesn't need to do anything
   // with it, but the C++ implementation appears to wait for the call to finish before sending
   // this.
-  inline bool isResultsSentElsewhere() const;
-  inline  ::capnp::Void getResultsSentElsewhere() const;
 
+  inline bool isTakeFromOtherQuestion() const;
+  inline  ::uint32_t getTakeFromOtherQuestion() const;
   // The sender has also sent (before this message) a `Call` with the given question ID and with
   // `sendResultsTo.yourself` set, and the results of that other call should be used as the
   // results here.  `takeFromOtherQuestion` can only used once per question.
-  inline bool isTakeFromOtherQuestion() const;
-  inline  ::uint32_t getTakeFromOtherQuestion() const;
 
+  inline bool isAcceptFromThirdParty() const;
+  inline bool hasAcceptFromThirdParty() const;
+  inline ::capnp::AnyPointer::Reader getAcceptFromThirdParty() const;
   // **(level 3)**
   //
   // The caller should contact a third-party vat to pick up the results.  An `Accept` message
   // sent to the vat will return the result.  This pairs with `Call.sendResultsTo.thirdParty`.
   // It should only be used if the corresponding `Call` had `allowThirdPartyTailCall` set.
-  inline bool isAcceptFromThirdParty() const;
-  inline bool hasAcceptFromThirdParty() const;
-  inline ::capnp::AnyPointer::Reader getAcceptFromThirdParty() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1640,10 +1640,12 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  // Equal to the QuestionId of the corresponding `Call` message.
   inline  ::uint32_t getAnswerId();
   inline void setAnswerId( ::uint32_t value);
+  // Equal to the QuestionId of the corresponding `Call` message.
 
+  inline bool getReleaseParamCaps();
+  inline void setReleaseParamCaps(bool value);
   // If true, all capabilities that were in the params should be considered released.  The sender
   // must not send separate `Release` messages for them.  Level 0 implementations in particular
   // should always set this true.  This defaults true because if level 0 implementations forget to
@@ -1652,16 +1654,7 @@ public:
   //
   // The receiver should act as if the sender had sent a release message with count=1 for each
   // CapDescriptor in the original Call message.
-  inline bool getReleaseParamCaps();
-  inline void setReleaseParamCaps(bool value);
 
-  // The result.
-  //
-  // For regular method calls, `results.content` points to the result struct.
-  //
-  // For a `Return` in response to an `Accept` or `Bootstrap`, `results` contains a single
-  // capability (rather than a struct), and `results.content` is just a capability pointer with
-  // index 0.  A `Finish` is still required in this case.
   inline bool isResults();
   inline bool hasResults();
   inline  ::capnp::rpc::Payload::Builder getResults();
@@ -1669,8 +1662,14 @@ public:
   inline  ::capnp::rpc::Payload::Builder initResults();
   inline void adoptResults(::capnp::Orphan< ::capnp::rpc::Payload>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Payload> disownResults();
+  // The result.
+  //
+  // For regular method calls, `results.content` points to the result struct.
+  //
+  // For a `Return` in response to an `Accept` or `Bootstrap`, `results` contains a single
+  // capability (rather than a struct), and `results.content` is just a capability pointer with
+  // index 0.  A `Finish` is still required in this case.
 
-  // Indicates that the call failed and explains why.
   inline bool isException();
   inline bool hasException();
   inline  ::capnp::rpc::Exception::Builder getException();
@@ -1678,39 +1677,40 @@ public:
   inline  ::capnp::rpc::Exception::Builder initException();
   inline void adoptException(::capnp::Orphan< ::capnp::rpc::Exception>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Exception> disownException();
+  // Indicates that the call failed and explains why.
 
-  // Indicates that the call was canceled due to the caller sending a Finish message
-  // before the call had completed.
   inline bool isCanceled();
   inline  ::capnp::Void getCanceled();
   inline void setCanceled( ::capnp::Void value = ::capnp::VOID);
+  // Indicates that the call was canceled due to the caller sending a Finish message
+  // before the call had completed.
 
+  inline bool isResultsSentElsewhere();
+  inline  ::capnp::Void getResultsSentElsewhere();
+  inline void setResultsSentElsewhere( ::capnp::Void value = ::capnp::VOID);
   // This is set when returning from a `Call` that had `sendResultsTo` set to something other
   // than `caller`.
   //
   // It doesn't matter too much when this is sent, as the receiver doesn't need to do anything
   // with it, but the C++ implementation appears to wait for the call to finish before sending
   // this.
-  inline bool isResultsSentElsewhere();
-  inline  ::capnp::Void getResultsSentElsewhere();
-  inline void setResultsSentElsewhere( ::capnp::Void value = ::capnp::VOID);
 
-  // The sender has also sent (before this message) a `Call` with the given question ID and with
-  // `sendResultsTo.yourself` set, and the results of that other call should be used as the
-  // results here.  `takeFromOtherQuestion` can only used once per question.
   inline bool isTakeFromOtherQuestion();
   inline  ::uint32_t getTakeFromOtherQuestion();
   inline void setTakeFromOtherQuestion( ::uint32_t value);
+  // The sender has also sent (before this message) a `Call` with the given question ID and with
+  // `sendResultsTo.yourself` set, and the results of that other call should be used as the
+  // results here.  `takeFromOtherQuestion` can only used once per question.
 
+  inline bool isAcceptFromThirdParty();
+  inline bool hasAcceptFromThirdParty();
+  inline ::capnp::AnyPointer::Builder getAcceptFromThirdParty();
+  inline ::capnp::AnyPointer::Builder initAcceptFromThirdParty();
   // **(level 3)**
   //
   // The caller should contact a third-party vat to pick up the results.  An `Accept` message
   // sent to the vat will return the result.  This pairs with `Call.sendResultsTo.thirdParty`.
   // It should only be used if the corresponding `Call` had `allowThirdPartyTailCall` set.
-  inline bool isAcceptFromThirdParty();
-  inline bool hasAcceptFromThirdParty();
-  inline ::capnp::AnyPointer::Builder getAcceptFromThirdParty();
-  inline ::capnp::AnyPointer::Builder initAcceptFromThirdParty();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1755,15 +1755,15 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // ID of the call whose result is to be released.
   inline  ::uint32_t getQuestionId() const;
+  // ID of the call whose result is to be released.
 
+  inline bool getReleaseResultCaps() const;
   // If true, all capabilities that were in the results should be considered released.  The sender
   // must not send separate `Release` messages for them.  Level 0 implementations in particular
   // should always set this true.  This defaults true because if level 0 implementations forget to
   // set it they'll never notice (just silently leak caps), but if level >=1 implementations forget
   // set it false they'll quickly get errors.
-  inline bool getReleaseResultCaps() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1793,17 +1793,17 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the call whose result is to be released.
   inline  ::uint32_t getQuestionId();
   inline void setQuestionId( ::uint32_t value);
+  // ID of the call whose result is to be released.
 
+  inline bool getReleaseResultCaps();
+  inline void setReleaseResultCaps(bool value);
   // If true, all capabilities that were in the results should be considered released.  The sender
   // must not send separate `Release` messages for them.  Level 0 implementations in particular
   // should always set this true.  This defaults true because if level 0 implementations forget to
   // set it they'll never notice (just silently leak caps), but if level >=1 implementations forget
   // set it false they'll quickly get errors.
-  inline bool getReleaseResultCaps();
-  inline void setReleaseResultCaps(bool value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1849,6 +1849,7 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  inline  ::uint32_t getPromiseId() const;
   // The ID of the promise to be resolved.
   //
   // Unlike all other instances of `ExportId` sent from the exporter, the `Resolve` message does
@@ -1869,8 +1870,10 @@ public:
   // any reason to send a `Resolve`).  Thus a `Resolve` may be received for a promise of which
   // the receiver has no knowledge, because it already released it earlier.  In this case, the
   // receiver should simply release the capability to which the promise resolved.
-  inline  ::uint32_t getPromiseId() const;
 
+  inline bool isCap() const;
+  inline bool hasCap() const;
+  inline  ::capnp::rpc::CapDescriptor::Reader getCap() const;
   // The object to which the promise resolved.
   //
   // The sender promises that from this point forth, until `promiseId` is released, it shall
@@ -1881,14 +1884,11 @@ public:
   // `Disembargo` message towards `promiseId` in order to control message ordering -- that
   // `Disembargo` really needs to reflect back to exactly the object designated by `cap` even
   // if that object is itself a promise.
-  inline bool isCap() const;
-  inline bool hasCap() const;
-  inline  ::capnp::rpc::CapDescriptor::Reader getCap() const;
 
-  // Indicates that the promise was broken.
   inline bool isException() const;
   inline bool hasException() const;
   inline  ::capnp::rpc::Exception::Reader getException() const;
+  // Indicates that the promise was broken.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1919,6 +1919,8 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  inline  ::uint32_t getPromiseId();
+  inline void setPromiseId( ::uint32_t value);
   // The ID of the promise to be resolved.
   //
   // Unlike all other instances of `ExportId` sent from the exporter, the `Resolve` message does
@@ -1939,9 +1941,14 @@ public:
   // any reason to send a `Resolve`).  Thus a `Resolve` may be received for a promise of which
   // the receiver has no knowledge, because it already released it earlier.  In this case, the
   // receiver should simply release the capability to which the promise resolved.
-  inline  ::uint32_t getPromiseId();
-  inline void setPromiseId( ::uint32_t value);
 
+  inline bool isCap();
+  inline bool hasCap();
+  inline  ::capnp::rpc::CapDescriptor::Builder getCap();
+  inline void setCap( ::capnp::rpc::CapDescriptor::Reader value);
+  inline  ::capnp::rpc::CapDescriptor::Builder initCap();
+  inline void adoptCap(::capnp::Orphan< ::capnp::rpc::CapDescriptor>&& value);
+  inline ::capnp::Orphan< ::capnp::rpc::CapDescriptor> disownCap();
   // The object to which the promise resolved.
   //
   // The sender promises that from this point forth, until `promiseId` is released, it shall
@@ -1952,15 +1959,7 @@ public:
   // `Disembargo` message towards `promiseId` in order to control message ordering -- that
   // `Disembargo` really needs to reflect back to exactly the object designated by `cap` even
   // if that object is itself a promise.
-  inline bool isCap();
-  inline bool hasCap();
-  inline  ::capnp::rpc::CapDescriptor::Builder getCap();
-  inline void setCap( ::capnp::rpc::CapDescriptor::Reader value);
-  inline  ::capnp::rpc::CapDescriptor::Builder initCap();
-  inline void adoptCap(::capnp::Orphan< ::capnp::rpc::CapDescriptor>&& value);
-  inline ::capnp::Orphan< ::capnp::rpc::CapDescriptor> disownCap();
 
-  // Indicates that the promise was broken.
   inline bool isException();
   inline bool hasException();
   inline  ::capnp::rpc::Exception::Builder getException();
@@ -1968,6 +1967,7 @@ public:
   inline  ::capnp::rpc::Exception::Builder initException();
   inline void adoptException(::capnp::Orphan< ::capnp::rpc::Exception>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::Exception> disownException();
+  // Indicates that the promise was broken.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2012,12 +2012,12 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // What to release.
   inline  ::uint32_t getId() const;
+  // What to release.
 
+  inline  ::uint32_t getReferenceCount() const;
   // The amount by which to decrement the reference count.  The export is only actually released
   // when the reference count reaches zero.
-  inline  ::uint32_t getReferenceCount() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2047,14 +2047,14 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // What to release.
   inline  ::uint32_t getId();
   inline void setId( ::uint32_t value);
+  // What to release.
 
-  // The amount by which to decrement the reference count.  The export is only actually released
-  // when the reference count reaches zero.
   inline  ::uint32_t getReferenceCount();
   inline void setReferenceCount( ::uint32_t value);
+  // The amount by which to decrement the reference count.  The export is only actually released
+  // when the reference count reaches zero.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2099,9 +2099,9 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // What is to be disembargoed.
   inline bool hasTarget() const;
   inline  ::capnp::rpc::MessageTarget::Reader getTarget() const;
+  // What is to be disembargoed.
 
   inline typename Context::Reader getContext() const;
 
@@ -2133,13 +2133,13 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // What is to be disembargoed.
   inline bool hasTarget();
   inline  ::capnp::rpc::MessageTarget::Builder getTarget();
   inline void setTarget( ::capnp::rpc::MessageTarget::Reader value);
   inline  ::capnp::rpc::MessageTarget::Builder initTarget();
   inline void adoptTarget(::capnp::Orphan< ::capnp::rpc::MessageTarget>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::MessageTarget> disownTarget();
+  // What is to be disembargoed.
 
   inline typename Context::Builder getContext();
   inline typename Context::Builder initContext();
@@ -2190,6 +2190,8 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  inline bool isSenderLoopback() const;
+  inline  ::uint32_t getSenderLoopback() const;
   // The sender is requesting a disembargo on a promise that is known to resolve back to a
   // capability hosted by the sender.  As soon as the receiver has echoed back all pipelined calls
   // on this promise, it will deliver the Disembargo back to the sender with `receiverLoopback`
@@ -2199,14 +2201,14 @@ public:
   //
   // The receiver must verify that the target capability actually resolves back to the sender's
   // vat.  Otherwise, the sender has committed a protocol error and should be disconnected.
-  inline bool isSenderLoopback() const;
-  inline  ::uint32_t getSenderLoopback() const;
 
-  // The receiver previously sent a `senderLoopback` Disembargo towards a promise resolving to
-  // this capability, and that Disembargo is now being echoed back.
   inline bool isReceiverLoopback() const;
   inline  ::uint32_t getReceiverLoopback() const;
+  // The receiver previously sent a `senderLoopback` Disembargo towards a promise resolving to
+  // this capability, and that Disembargo is now being echoed back.
 
+  inline bool isAccept() const;
+  inline  ::capnp::Void getAccept() const;
   // **(level 3)**
   //
   // The sender is requesting a disembargo on a promise that is known to resolve to a third-party
@@ -2216,9 +2218,9 @@ public:
   // `Provide` message.
   //
   // See `Accept.embargo` for an example.
-  inline bool isAccept() const;
-  inline  ::capnp::Void getAccept() const;
 
+  inline bool isProvide() const;
+  inline  ::uint32_t getProvide() const;
   // **(level 3)**
   //
   // The sender is requesting a disembargo on a capability currently being provided to a third
@@ -2226,8 +2228,6 @@ public:
   // this capability.  On receipt, the receiver (the capability host) shall release the embargo
   // on the `Accept` message that it has received from the third party.  See `Accept.embargo` for
   // an example.
-  inline bool isProvide() const;
-  inline  ::uint32_t getProvide() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2258,6 +2258,9 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  inline bool isSenderLoopback();
+  inline  ::uint32_t getSenderLoopback();
+  inline void setSenderLoopback( ::uint32_t value);
   // The sender is requesting a disembargo on a promise that is known to resolve back to a
   // capability hosted by the sender.  As soon as the receiver has echoed back all pipelined calls
   // on this promise, it will deliver the Disembargo back to the sender with `receiverLoopback`
@@ -2267,16 +2270,16 @@ public:
   //
   // The receiver must verify that the target capability actually resolves back to the sender's
   // vat.  Otherwise, the sender has committed a protocol error and should be disconnected.
-  inline bool isSenderLoopback();
-  inline  ::uint32_t getSenderLoopback();
-  inline void setSenderLoopback( ::uint32_t value);
 
-  // The receiver previously sent a `senderLoopback` Disembargo towards a promise resolving to
-  // this capability, and that Disembargo is now being echoed back.
   inline bool isReceiverLoopback();
   inline  ::uint32_t getReceiverLoopback();
   inline void setReceiverLoopback( ::uint32_t value);
+  // The receiver previously sent a `senderLoopback` Disembargo towards a promise resolving to
+  // this capability, and that Disembargo is now being echoed back.
 
+  inline bool isAccept();
+  inline  ::capnp::Void getAccept();
+  inline void setAccept( ::capnp::Void value = ::capnp::VOID);
   // **(level 3)**
   //
   // The sender is requesting a disembargo on a promise that is known to resolve to a third-party
@@ -2286,10 +2289,10 @@ public:
   // `Provide` message.
   //
   // See `Accept.embargo` for an example.
-  inline bool isAccept();
-  inline  ::capnp::Void getAccept();
-  inline void setAccept( ::capnp::Void value = ::capnp::VOID);
 
+  inline bool isProvide();
+  inline  ::uint32_t getProvide();
+  inline void setProvide( ::uint32_t value);
   // **(level 3)**
   //
   // The sender is requesting a disembargo on a capability currently being provided to a third
@@ -2297,9 +2300,6 @@ public:
   // this capability.  On receipt, the receiver (the capability host) shall release the embargo
   // on the `Accept` message that it has received from the third party.  See `Accept.embargo` for
   // an example.
-  inline bool isProvide();
-  inline  ::uint32_t getProvide();
-  inline void setProvide( ::uint32_t value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2344,19 +2344,19 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId() const;
   // Question ID to be held open until the recipient has received the capability.  A result will be
   // returned once the third party has successfully received the capability.  The sender must at some
   // point send a `Finish` message as with any other call, and that message can be used to cancel the
   // whole operation.
-  inline  ::uint32_t getQuestionId() const;
 
-  // What is to be provided to the third party.
   inline bool hasTarget() const;
   inline  ::capnp::rpc::MessageTarget::Reader getTarget() const;
+  // What is to be provided to the third party.
 
-  // Identity of the third party that is expected to pick up the capability.
   inline bool hasRecipient() const;
   inline ::capnp::AnyPointer::Reader getRecipient() const;
+  // Identity of the third party that is expected to pick up the capability.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2386,25 +2386,25 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId();
+  inline void setQuestionId( ::uint32_t value);
   // Question ID to be held open until the recipient has received the capability.  A result will be
   // returned once the third party has successfully received the capability.  The sender must at some
   // point send a `Finish` message as with any other call, and that message can be used to cancel the
   // whole operation.
-  inline  ::uint32_t getQuestionId();
-  inline void setQuestionId( ::uint32_t value);
 
-  // What is to be provided to the third party.
   inline bool hasTarget();
   inline  ::capnp::rpc::MessageTarget::Builder getTarget();
   inline void setTarget( ::capnp::rpc::MessageTarget::Reader value);
   inline  ::capnp::rpc::MessageTarget::Builder initTarget();
   inline void adoptTarget(::capnp::Orphan< ::capnp::rpc::MessageTarget>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::MessageTarget> disownTarget();
+  // What is to be provided to the third party.
 
-  // Identity of the third party that is expected to pick up the capability.
   inline bool hasRecipient();
   inline ::capnp::AnyPointer::Builder getRecipient();
   inline ::capnp::AnyPointer::Builder initRecipient();
+  // Identity of the third party that is expected to pick up the capability.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2450,15 +2450,16 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId() const;
   // A new question ID identifying this accept message, which will eventually receive a Return
   // message containing the provided capability (or the call result in the case of a redirected
   // return).
-  inline  ::uint32_t getQuestionId() const;
 
-  // Identifies the provided object to be picked up.
   inline bool hasProvision() const;
   inline ::capnp::AnyPointer::Reader getProvision() const;
+  // Identifies the provided object to be picked up.
 
+  inline bool getEmbargo() const;
   // If true, this accept shall be temporarily embargoed.  The resulting `Return` will not be sent,
   // and any pipelined calls will not be delivered, until the embargo is released.  The receiver
   // (the capability host) will expect the provider (the vat that sent the `Provide` message) to
@@ -2491,7 +2492,6 @@ public:
   //   before delivering bar().
   // - Vat C receives `Disembargo` from Vat B.  It can now send a `Return` for the `Accept` from
   //   Vat A, as well as deliver bar().
-  inline bool getEmbargo() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2521,17 +2521,19 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId();
+  inline void setQuestionId( ::uint32_t value);
   // A new question ID identifying this accept message, which will eventually receive a Return
   // message containing the provided capability (or the call result in the case of a redirected
   // return).
-  inline  ::uint32_t getQuestionId();
-  inline void setQuestionId( ::uint32_t value);
 
-  // Identifies the provided object to be picked up.
   inline bool hasProvision();
   inline ::capnp::AnyPointer::Builder getProvision();
   inline ::capnp::AnyPointer::Builder initProvision();
+  // Identifies the provided object to be picked up.
 
+  inline bool getEmbargo();
+  inline void setEmbargo(bool value);
   // If true, this accept shall be temporarily embargoed.  The resulting `Return` will not be sent,
   // and any pipelined calls will not be delivered, until the embargo is released.  The receiver
   // (the capability host) will expect the provider (the vat that sent the `Provide` message) to
@@ -2564,8 +2566,6 @@ public:
   //   before delivering bar().
   // - Vat C receives `Disembargo` from Vat B.  It can now send a `Return` for the `Accept` from
   //   Vat A, as well as deliver bar().
-  inline bool getEmbargo();
-  inline void setEmbargo(bool value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2610,6 +2610,7 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId() const;
   // Question ID used to respond to this Join.  (Note that this ID only identifies one part of the
   // request for one hop; each part has a different ID and relayed copies of the request have
   // (probably) different IDs still.)
@@ -2625,16 +2626,15 @@ public:
   // joined object's host to detect when the Join operation is canceled before completing -- if
   // it receives a `Finish` for one of the join results before the joiner successfully
   // connects.  It can then free any resources it had allocated as part of the join.
-  inline  ::uint32_t getQuestionId() const;
 
-  // The capability to join.
   inline bool hasTarget() const;
   inline  ::capnp::rpc::MessageTarget::Reader getTarget() const;
+  // The capability to join.
 
-  // A part of the join key.  These combine to form the complete join key, which is used to establish
-  // a direct connection.
   inline bool hasKeyPart() const;
   inline ::capnp::AnyPointer::Reader getKeyPart() const;
+  // A part of the join key.  These combine to form the complete join key, which is used to establish
+  // a direct connection.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2664,6 +2664,8 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId();
+  inline void setQuestionId( ::uint32_t value);
   // Question ID used to respond to this Join.  (Note that this ID only identifies one part of the
   // request for one hop; each part has a different ID and relayed copies of the request have
   // (probably) different IDs still.)
@@ -2679,22 +2681,20 @@ public:
   // joined object's host to detect when the Join operation is canceled before completing -- if
   // it receives a `Finish` for one of the join results before the joiner successfully
   // connects.  It can then free any resources it had allocated as part of the join.
-  inline  ::uint32_t getQuestionId();
-  inline void setQuestionId( ::uint32_t value);
 
-  // The capability to join.
   inline bool hasTarget();
   inline  ::capnp::rpc::MessageTarget::Builder getTarget();
   inline void setTarget( ::capnp::rpc::MessageTarget::Reader value);
   inline  ::capnp::rpc::MessageTarget::Builder initTarget();
   inline void adoptTarget(::capnp::Orphan< ::capnp::rpc::MessageTarget>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::MessageTarget> disownTarget();
+  // The capability to join.
 
-  // A part of the join key.  These combine to form the complete join key, which is used to establish
-  // a direct connection.
   inline bool hasKeyPart();
   inline ::capnp::AnyPointer::Builder getKeyPart();
   inline ::capnp::AnyPointer::Builder initKeyPart();
+  // A part of the join key.  These combine to form the complete join key, which is used to establish
+  // a direct connection.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2741,19 +2741,19 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  // This message is to a capability or promise previously imported by the caller (exported by
-  // the receiver).
   inline bool isImportedCap() const;
   inline  ::uint32_t getImportedCap() const;
+  // This message is to a capability or promise previously imported by the caller (exported by
+  // the receiver).
 
+  inline bool isPromisedAnswer() const;
+  inline bool hasPromisedAnswer() const;
+  inline  ::capnp::rpc::PromisedAnswer::Reader getPromisedAnswer() const;
   // This message is to a capability that is expected to be returned by another call that has not
   // yet been completed.
   //
   // At level 0, this is supported only for addressing the result of a previous `Bootstrap`, so
   // that initial startup doesn't require a round trip.
-  inline bool isPromisedAnswer() const;
-  inline bool hasPromisedAnswer() const;
-  inline  ::capnp::rpc::PromisedAnswer::Reader getPromisedAnswer() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2784,17 +2784,12 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  // This message is to a capability or promise previously imported by the caller (exported by
-  // the receiver).
   inline bool isImportedCap();
   inline  ::uint32_t getImportedCap();
   inline void setImportedCap( ::uint32_t value);
+  // This message is to a capability or promise previously imported by the caller (exported by
+  // the receiver).
 
-  // This message is to a capability that is expected to be returned by another call that has not
-  // yet been completed.
-  //
-  // At level 0, this is supported only for addressing the result of a previous `Bootstrap`, so
-  // that initial startup doesn't require a round trip.
   inline bool isPromisedAnswer();
   inline bool hasPromisedAnswer();
   inline  ::capnp::rpc::PromisedAnswer::Builder getPromisedAnswer();
@@ -2802,6 +2797,11 @@ public:
   inline  ::capnp::rpc::PromisedAnswer::Builder initPromisedAnswer();
   inline void adoptPromisedAnswer(::capnp::Orphan< ::capnp::rpc::PromisedAnswer>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::PromisedAnswer> disownPromisedAnswer();
+  // This message is to a capability that is expected to be returned by another call that has not
+  // yet been completed.
+  //
+  // At level 0, this is supported only for addressing the result of a previous `Bootstrap`, so
+  // that initial startup doesn't require a round trip.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2846,14 +2846,14 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Some Cap'n Proto data structure.  Capability pointers embedded in this structure index into
-  // `capTable`.
   inline bool hasContent() const;
   inline ::capnp::AnyPointer::Reader getContent() const;
+  // Some Cap'n Proto data structure.  Capability pointers embedded in this structure index into
+  // `capTable`.
 
-  // Descriptors corresponding to the cap pointers in `content`.
   inline bool hasCapTable() const;
   inline  ::capnp::List< ::capnp::rpc::CapDescriptor,  ::capnp::Kind::STRUCT>::Reader getCapTable() const;
+  // Descriptors corresponding to the cap pointers in `content`.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2883,19 +2883,19 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Some Cap'n Proto data structure.  Capability pointers embedded in this structure index into
-  // `capTable`.
   inline bool hasContent();
   inline ::capnp::AnyPointer::Builder getContent();
   inline ::capnp::AnyPointer::Builder initContent();
+  // Some Cap'n Proto data structure.  Capability pointers embedded in this structure index into
+  // `capTable`.
 
-  // Descriptors corresponding to the cap pointers in `content`.
   inline bool hasCapTable();
   inline  ::capnp::List< ::capnp::rpc::CapDescriptor,  ::capnp::Kind::STRUCT>::Builder getCapTable();
   inline void setCapTable( ::capnp::List< ::capnp::rpc::CapDescriptor,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::rpc::CapDescriptor,  ::capnp::Kind::STRUCT>::Builder initCapTable(unsigned int size);
   inline void adoptCapTable(::capnp::Orphan< ::capnp::List< ::capnp::rpc::CapDescriptor,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::rpc::CapDescriptor,  ::capnp::Kind::STRUCT>> disownCapTable();
+  // Descriptors corresponding to the cap pointers in `content`.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2941,38 +2941,41 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  inline bool isNone() const;
+  inline  ::capnp::Void getNone() const;
   // There is no capability here.  This `CapDescriptor` should not appear in the payload content.
   // A `none` CapDescriptor can be generated when an application inserts a capability into a
   // message and then later changes its mind and removes it -- rewriting all of the other
   // capability pointers may be hard, so instead a tombstone is left, similar to the way a removed
   // struct or list instance is zeroed out of the message but the space is not reclaimed.
   // Hopefully this is unusual.
-  inline bool isNone() const;
-  inline  ::capnp::Void getNone() const;
 
-  // The ID of a capability in the sender's export table (receiver's import table).  It may be a
-  // newly allocated table entry, or an existing entry (increments the reference count).
   inline bool isSenderHosted() const;
   inline  ::uint32_t getSenderHosted() const;
+  // The ID of a capability in the sender's export table (receiver's import table).  It may be a
+  // newly allocated table entry, or an existing entry (increments the reference count).
 
+  inline bool isSenderPromise() const;
+  inline  ::uint32_t getSenderPromise() const;
   // A promise that the sender will resolve later.  The sender will send exactly one Resolve
   // message at a future point in time to replace this promise.  Note that even if the same
   // `senderPromise` is received multiple times, only one `Resolve` is sent to cover all of
   // them.  If `senderPromise` is released before the `Resolve` is sent, the sender (of this
   // `CapDescriptor`) may choose not to send the `Resolve` at all.
-  inline bool isSenderPromise() const;
-  inline  ::uint32_t getSenderPromise() const;
 
-  // A capability (or promise) previously exported by the receiver (imported by the sender).
   inline bool isReceiverHosted() const;
   inline  ::uint32_t getReceiverHosted() const;
+  // A capability (or promise) previously exported by the receiver (imported by the sender).
 
-  // A capability expected to be returned in the results of a currently-outstanding call posed
-  // by the sender.
   inline bool isReceiverAnswer() const;
   inline bool hasReceiverAnswer() const;
   inline  ::capnp::rpc::PromisedAnswer::Reader getReceiverAnswer() const;
+  // A capability expected to be returned in the results of a currently-outstanding call posed
+  // by the sender.
 
+  inline bool isThirdPartyHosted() const;
+  inline bool hasThirdPartyHosted() const;
+  inline  ::capnp::rpc::ThirdPartyCapDescriptor::Reader getThirdPartyHosted() const;
   // **(level 3)**
   //
   // A capability that lives in neither the sender's nor the receiver's vat.  The sender needs
@@ -2980,10 +2983,8 @@ public:
   //
   // Level 1 and 2 implementations that receive a `thirdPartyHosted` may simply send calls to its
   // `vine` instead.
-  inline bool isThirdPartyHosted() const;
-  inline bool hasThirdPartyHosted() const;
-  inline  ::capnp::rpc::ThirdPartyCapDescriptor::Reader getThirdPartyHosted() const;
 
+  inline  ::uint8_t getAttachedFd() const;
   // If the RPC message in which this CapDescriptor was delivered also had file descriptors
   // attached, and `fd` is a valid index into the list of attached file descriptors, then
   // that file descriptor should be attached to this capability. If `attachedFd` is out-of-bounds
@@ -3039,7 +3040,6 @@ public:
   // Conveniently, this also means we're able to use 0xff as the default value, which will always
   // be out-of-range (of course, the implementation should explicitly enforce that 255 descriptors
   // cannot be sent at once, rather than relying on Linux to do so).
-  inline  ::uint8_t getAttachedFd() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3070,38 +3070,36 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  inline bool isNone();
+  inline  ::capnp::Void getNone();
+  inline void setNone( ::capnp::Void value = ::capnp::VOID);
   // There is no capability here.  This `CapDescriptor` should not appear in the payload content.
   // A `none` CapDescriptor can be generated when an application inserts a capability into a
   // message and then later changes its mind and removes it -- rewriting all of the other
   // capability pointers may be hard, so instead a tombstone is left, similar to the way a removed
   // struct or list instance is zeroed out of the message but the space is not reclaimed.
   // Hopefully this is unusual.
-  inline bool isNone();
-  inline  ::capnp::Void getNone();
-  inline void setNone( ::capnp::Void value = ::capnp::VOID);
 
-  // The ID of a capability in the sender's export table (receiver's import table).  It may be a
-  // newly allocated table entry, or an existing entry (increments the reference count).
   inline bool isSenderHosted();
   inline  ::uint32_t getSenderHosted();
   inline void setSenderHosted( ::uint32_t value);
+  // The ID of a capability in the sender's export table (receiver's import table).  It may be a
+  // newly allocated table entry, or an existing entry (increments the reference count).
 
+  inline bool isSenderPromise();
+  inline  ::uint32_t getSenderPromise();
+  inline void setSenderPromise( ::uint32_t value);
   // A promise that the sender will resolve later.  The sender will send exactly one Resolve
   // message at a future point in time to replace this promise.  Note that even if the same
   // `senderPromise` is received multiple times, only one `Resolve` is sent to cover all of
   // them.  If `senderPromise` is released before the `Resolve` is sent, the sender (of this
   // `CapDescriptor`) may choose not to send the `Resolve` at all.
-  inline bool isSenderPromise();
-  inline  ::uint32_t getSenderPromise();
-  inline void setSenderPromise( ::uint32_t value);
 
-  // A capability (or promise) previously exported by the receiver (imported by the sender).
   inline bool isReceiverHosted();
   inline  ::uint32_t getReceiverHosted();
   inline void setReceiverHosted( ::uint32_t value);
+  // A capability (or promise) previously exported by the receiver (imported by the sender).
 
-  // A capability expected to be returned in the results of a currently-outstanding call posed
-  // by the sender.
   inline bool isReceiverAnswer();
   inline bool hasReceiverAnswer();
   inline  ::capnp::rpc::PromisedAnswer::Builder getReceiverAnswer();
@@ -3109,14 +3107,9 @@ public:
   inline  ::capnp::rpc::PromisedAnswer::Builder initReceiverAnswer();
   inline void adoptReceiverAnswer(::capnp::Orphan< ::capnp::rpc::PromisedAnswer>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::PromisedAnswer> disownReceiverAnswer();
+  // A capability expected to be returned in the results of a currently-outstanding call posed
+  // by the sender.
 
-  // **(level 3)**
-  //
-  // A capability that lives in neither the sender's nor the receiver's vat.  The sender needs
-  // to form a direct connection to a third party to pick up the capability.
-  //
-  // Level 1 and 2 implementations that receive a `thirdPartyHosted` may simply send calls to its
-  // `vine` instead.
   inline bool isThirdPartyHosted();
   inline bool hasThirdPartyHosted();
   inline  ::capnp::rpc::ThirdPartyCapDescriptor::Builder getThirdPartyHosted();
@@ -3124,7 +3117,16 @@ public:
   inline  ::capnp::rpc::ThirdPartyCapDescriptor::Builder initThirdPartyHosted();
   inline void adoptThirdPartyHosted(::capnp::Orphan< ::capnp::rpc::ThirdPartyCapDescriptor>&& value);
   inline ::capnp::Orphan< ::capnp::rpc::ThirdPartyCapDescriptor> disownThirdPartyHosted();
+  // **(level 3)**
+  //
+  // A capability that lives in neither the sender's nor the receiver's vat.  The sender needs
+  // to form a direct connection to a third party to pick up the capability.
+  //
+  // Level 1 and 2 implementations that receive a `thirdPartyHosted` may simply send calls to its
+  // `vine` instead.
 
+  inline  ::uint8_t getAttachedFd();
+  inline void setAttachedFd( ::uint8_t value);
   // If the RPC message in which this CapDescriptor was delivered also had file descriptors
   // attached, and `fd` is a valid index into the list of attached file descriptors, then
   // that file descriptor should be attached to this capability. If `attachedFd` is out-of-bounds
@@ -3180,8 +3182,6 @@ public:
   // Conveniently, this also means we're able to use 0xff as the default value, which will always
   // be out-of-range (of course, the implementation should explicitly enforce that 255 descriptors
   // cannot be sent at once, rather than relying on Linux to do so).
-  inline  ::uint8_t getAttachedFd();
-  inline void setAttachedFd( ::uint8_t value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3226,15 +3226,15 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getQuestionId() const;
   // ID of the question (in the sender's question table / receiver's answer table) whose answer is
   // expected to contain the capability.
-  inline  ::uint32_t getQuestionId() const;
 
+  inline bool hasTransform() const;
+  inline  ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>::Reader getTransform() const;
   // Operations / transformations to apply to the result in order to get the capability actually
   // being addressed.  E.g. if the result is a struct and you want to call a method on a capability
   // pointed to by a field of the struct, you need a `getPointerField` op.
-  inline bool hasTransform() const;
-  inline  ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>::Reader getTransform() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3264,20 +3264,20 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the question (in the sender's question table / receiver's answer table) whose answer is
-  // expected to contain the capability.
   inline  ::uint32_t getQuestionId();
   inline void setQuestionId( ::uint32_t value);
+  // ID of the question (in the sender's question table / receiver's answer table) whose answer is
+  // expected to contain the capability.
 
-  // Operations / transformations to apply to the result in order to get the capability actually
-  // being addressed.  E.g. if the result is a struct and you want to call a method on a capability
-  // pointed to by a field of the struct, you need a `getPointerField` op.
   inline bool hasTransform();
   inline  ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>::Builder getTransform();
   inline void setTransform( ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>::Builder initTransform(unsigned int size);
   inline void adoptTransform(::capnp::Orphan< ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::rpc::PromisedAnswer::Op,  ::capnp::Kind::STRUCT>> disownTransform();
+  // Operations / transformations to apply to the result in order to get the capability actually
+  // being addressed.  E.g. if the result is a struct and you want to call a method on a capability
+  // pointed to by a field of the struct, you need a `getPointerField` op.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3323,15 +3323,15 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  // Does nothing.  This member is mostly defined so that we can make `Op` a union even
-  // though (as of this writing) only one real operation is defined.
   inline bool isNoop() const;
   inline  ::capnp::Void getNoop() const;
+  // Does nothing.  This member is mostly defined so that we can make `Op` a union even
+  // though (as of this writing) only one real operation is defined.
 
-  // Get a pointer field within a struct.  The number is an index into the pointer section, NOT
-  // a field ordinal, so that the receiver does not need to understand the schema.
   inline bool isGetPointerField() const;
   inline  ::uint16_t getGetPointerField() const;
+  // Get a pointer field within a struct.  The number is an index into the pointer section, NOT
+  // a field ordinal, so that the receiver does not need to understand the schema.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3362,17 +3362,17 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  // Does nothing.  This member is mostly defined so that we can make `Op` a union even
-  // though (as of this writing) only one real operation is defined.
   inline bool isNoop();
   inline  ::capnp::Void getNoop();
   inline void setNoop( ::capnp::Void value = ::capnp::VOID);
+  // Does nothing.  This member is mostly defined so that we can make `Op` a union even
+  // though (as of this writing) only one real operation is defined.
 
-  // Get a pointer field within a struct.  The number is an index into the pointer section, NOT
-  // a field ordinal, so that the receiver does not need to understand the schema.
   inline bool isGetPointerField();
   inline  ::uint16_t getGetPointerField();
   inline void setGetPointerField( ::uint16_t value);
+  // Get a pointer field within a struct.  The number is an index into the pointer section, NOT
+  // a field ordinal, so that the receiver does not need to understand the schema.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3417,10 +3417,11 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Identifies the third-party host and the specific capability to accept from it.
   inline bool hasId() const;
   inline ::capnp::AnyPointer::Reader getId() const;
+  // Identifies the third-party host and the specific capability to accept from it.
 
+  inline  ::uint32_t getVineId() const;
   // A proxy for the third-party object exported by the sender.  In CapTP terminology this is called
   // a "vine", because it is an indirect reference to the third-party object that snakes through the
   // sender vat.  This serves two purposes:
@@ -3435,7 +3436,6 @@ public:
   //
   // The sender will close the `Provide` request that it has sent to the third party as soon as
   // it receives either a `Call` or a `Release` message directed at the vine.
-  inline  ::uint32_t getVineId() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3465,11 +3465,13 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Identifies the third-party host and the specific capability to accept from it.
   inline bool hasId();
   inline ::capnp::AnyPointer::Builder getId();
   inline ::capnp::AnyPointer::Builder initId();
+  // Identifies the third-party host and the specific capability to accept from it.
 
+  inline  ::uint32_t getVineId();
+  inline void setVineId( ::uint32_t value);
   // A proxy for the third-party object exported by the sender.  In CapTP terminology this is called
   // a "vine", because it is an indirect reference to the third-party object that snakes through the
   // sender vat.  This serves two purposes:
@@ -3484,8 +3486,6 @@ public:
   //
   // The sender will close the `Provide` request that it has sent to the third party as soon as
   // it receives either a `Call` or a `Release` message directed at the vine.
-  inline  ::uint32_t getVineId();
-  inline void setVineId( ::uint32_t value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3530,19 +3530,19 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Human-readable failure description.
   inline bool hasReason() const;
   inline  ::capnp::Text::Reader getReason() const;
+  // Human-readable failure description.
 
-  // OBSOLETE. Ignore.
   inline bool getObsoleteIsCallersFault() const;
+  // OBSOLETE. Ignore.
 
-  // OBSOLETE. See `type` instead.
   inline  ::uint16_t getObsoleteDurability() const;
+  // OBSOLETE. See `type` instead.
 
+  inline  ::capnp::rpc::Exception::Type getType() const;
   // The type of the error. The purpose of this enum is not to describe the error itself, but
   // rather to describe how the client might want to respond to the error.
-  inline  ::capnp::rpc::Exception::Type getType() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3572,26 +3572,26 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Human-readable failure description.
   inline bool hasReason();
   inline  ::capnp::Text::Builder getReason();
   inline void setReason( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initReason(unsigned int size);
   inline void adoptReason(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownReason();
+  // Human-readable failure description.
 
-  // OBSOLETE. Ignore.
   inline bool getObsoleteIsCallersFault();
   inline void setObsoleteIsCallersFault(bool value);
+  // OBSOLETE. Ignore.
 
-  // OBSOLETE. See `type` instead.
   inline  ::uint16_t getObsoleteDurability();
   inline void setObsoleteDurability( ::uint16_t value);
+  // OBSOLETE. See `type` instead.
 
-  // The type of the error. The purpose of this enum is not to describe the error itself, but
-  // rather to describe how the client might want to respond to the error.
   inline  ::capnp::rpc::Exception::Type getType();
   inline void setType( ::capnp::rpc::Exception::Type value);
+  // The type of the error. The purpose of this enum is not to describe the error itself, but
+  // rather to describe how the client might want to respond to the error.
 
 private:
   ::capnp::_::StructBuilder _builder;

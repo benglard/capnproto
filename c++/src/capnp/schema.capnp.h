@@ -734,31 +734,31 @@ public:
   inline Which which() const;
   inline  ::uint64_t getId() const;
 
+  inline bool hasDisplayName() const;
+  inline  ::capnp::Text::Reader getDisplayName() const;
   // Name to present to humans to identify this Node.  You should not attempt to parse this.  Its
   // format could change.  It is not guaranteed to be unique.
   //
   // (On Zooko's triangle, this is the node's nickname.)
-  inline bool hasDisplayName() const;
-  inline  ::capnp::Text::Reader getDisplayName() const;
 
+  inline  ::uint32_t getDisplayNamePrefixLength() const;
   // If you want a shorter version of `displayName` (just naming this node, without its surrounding
   // scope), chop off this many characters from the beginning of `displayName`.
-  inline  ::uint32_t getDisplayNamePrefixLength() const;
 
+  inline  ::uint64_t getScopeId() const;
   // ID of the lexical parent node.  Typically, the scope node will have a NestedNode pointing back
   // at this node, but robust code should avoid relying on this (and, in fact, group nodes are not
   // listed in the outer struct's nestedNodes, since they are listed in the fields).  `scopeId` is
   // zero if the node has no parent, which is normally only the case with files, but should be
   // allowed for any kind of node (in order to make runtime type generation easier).
-  inline  ::uint64_t getScopeId() const;
 
-  // List of nodes nested within this node, along with the names under which they were declared.
   inline bool hasNestedNodes() const;
   inline  ::capnp::List< ::capnp::schema::Node::NestedNode,  ::capnp::Kind::STRUCT>::Reader getNestedNodes() const;
+  // List of nodes nested within this node, along with the names under which they were declared.
 
-  // Annotations applied to this node.
   inline bool hasAnnotations() const;
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Reader getAnnotations() const;
+  // Annotations applied to this node.
 
   inline bool isFile() const;
   inline  ::capnp::Void getFile() const;
@@ -778,17 +778,17 @@ public:
   inline bool isAnnotation() const;
   inline typename Annotation::Reader getAnnotation() const;
 
-  // If this node is parameterized (generic), the list of parameters. Empty for non-generic types.
   inline bool hasParameters() const;
   inline  ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Reader getParameters() const;
+  // If this node is parameterized (generic), the list of parameters. Empty for non-generic types.
 
+  inline bool getIsGeneric() const;
   // True if this node is generic, meaning that it or one of its parent scopes has a non-empty
   // `parameters`.
-  inline bool getIsGeneric() const;
 
-  // The top-level doc comment for the Node.
   inline bool hasDocComment() const;
   inline  ::capnp::Text::Reader getDocComment() const;
+  // The top-level doc comment for the Node.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -822,45 +822,45 @@ public:
   inline  ::uint64_t getId();
   inline void setId( ::uint64_t value);
 
-  // Name to present to humans to identify this Node.  You should not attempt to parse this.  Its
-  // format could change.  It is not guaranteed to be unique.
-  //
-  // (On Zooko's triangle, this is the node's nickname.)
   inline bool hasDisplayName();
   inline  ::capnp::Text::Builder getDisplayName();
   inline void setDisplayName( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initDisplayName(unsigned int size);
   inline void adoptDisplayName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownDisplayName();
+  // Name to present to humans to identify this Node.  You should not attempt to parse this.  Its
+  // format could change.  It is not guaranteed to be unique.
+  //
+  // (On Zooko's triangle, this is the node's nickname.)
 
-  // If you want a shorter version of `displayName` (just naming this node, without its surrounding
-  // scope), chop off this many characters from the beginning of `displayName`.
   inline  ::uint32_t getDisplayNamePrefixLength();
   inline void setDisplayNamePrefixLength( ::uint32_t value);
+  // If you want a shorter version of `displayName` (just naming this node, without its surrounding
+  // scope), chop off this many characters from the beginning of `displayName`.
 
+  inline  ::uint64_t getScopeId();
+  inline void setScopeId( ::uint64_t value);
   // ID of the lexical parent node.  Typically, the scope node will have a NestedNode pointing back
   // at this node, but robust code should avoid relying on this (and, in fact, group nodes are not
   // listed in the outer struct's nestedNodes, since they are listed in the fields).  `scopeId` is
   // zero if the node has no parent, which is normally only the case with files, but should be
   // allowed for any kind of node (in order to make runtime type generation easier).
-  inline  ::uint64_t getScopeId();
-  inline void setScopeId( ::uint64_t value);
 
-  // List of nodes nested within this node, along with the names under which they were declared.
   inline bool hasNestedNodes();
   inline  ::capnp::List< ::capnp::schema::Node::NestedNode,  ::capnp::Kind::STRUCT>::Builder getNestedNodes();
   inline void setNestedNodes( ::capnp::List< ::capnp::schema::Node::NestedNode,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Node::NestedNode,  ::capnp::Kind::STRUCT>::Builder initNestedNodes(unsigned int size);
   inline void adoptNestedNodes(::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::NestedNode,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::NestedNode,  ::capnp::Kind::STRUCT>> disownNestedNodes();
+  // List of nodes nested within this node, along with the names under which they were declared.
 
-  // Annotations applied to this node.
   inline bool hasAnnotations();
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Builder getAnnotations();
   inline void setAnnotations( ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Builder initAnnotations(unsigned int size);
   inline void adoptAnnotations(::capnp::Orphan< ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>> disownAnnotations();
+  // Annotations applied to this node.
 
   inline bool isFile();
   inline  ::capnp::Void getFile();
@@ -886,26 +886,26 @@ public:
   inline typename Annotation::Builder getAnnotation();
   inline typename Annotation::Builder initAnnotation();
 
-  // If this node is parameterized (generic), the list of parameters. Empty for non-generic types.
   inline bool hasParameters();
   inline  ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Builder getParameters();
   inline void setParameters( ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Builder initParameters(unsigned int size);
   inline void adoptParameters(::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>> disownParameters();
+  // If this node is parameterized (generic), the list of parameters. Empty for non-generic types.
 
-  // True if this node is generic, meaning that it or one of its parent scopes has a non-empty
-  // `parameters`.
   inline bool getIsGeneric();
   inline void setIsGeneric(bool value);
+  // True if this node is generic, meaning that it or one of its parent scopes has a non-empty
+  // `parameters`.
 
-  // The top-level doc comment for the Node.
   inline bool hasDocComment();
   inline  ::capnp::Text::Builder getDocComment();
   inline void setDocComment( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initDocComment(unsigned int size);
   inline void adoptDocComment(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownDocComment();
+  // The top-level doc comment for the Node.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1031,15 +1031,15 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline bool hasName() const;
+  inline  ::capnp::Text::Reader getName() const;
   // Unqualified symbol name.  Unlike Node.displayName, this *can* be used programmatically.
   //
   // (On Zooko's triangle, this is the node's petname according to its parent scope.)
-  inline bool hasName() const;
-  inline  ::capnp::Text::Reader getName() const;
 
+  inline  ::uint64_t getId() const;
   // ID of the nested node.  Typically, the target node's scopeId points back to this node, but
   // robust code should avoid relying on this.
-  inline  ::uint64_t getId() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1069,20 +1069,20 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Unqualified symbol name.  Unlike Node.displayName, this *can* be used programmatically.
-  //
-  // (On Zooko's triangle, this is the node's petname according to its parent scope.)
   inline bool hasName();
   inline  ::capnp::Text::Builder getName();
   inline void setName( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initName(unsigned int size);
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
+  // Unqualified symbol name.  Unlike Node.displayName, this *can* be used programmatically.
+  //
+  // (On Zooko's triangle, this is the node's petname according to its parent scope.)
 
-  // ID of the nested node.  Typically, the target node's scopeId points back to this node, but
-  // robust code should avoid relying on this.
   inline  ::uint64_t getId();
   inline void setId( ::uint64_t value);
+  // ID of the nested node.  Typically, the target node's scopeId points back to this node, but
+  // robust code should avoid relying on this.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1127,20 +1127,20 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // ID of the Node which this info describes.
   inline  ::uint64_t getId() const;
+  // ID of the Node which this info describes.
 
-  // The top-level doc comment for the Node.
   inline bool hasDocComment() const;
   inline  ::capnp::Text::Reader getDocComment() const;
+  // The top-level doc comment for the Node.
 
+  inline bool hasMembers() const;
+  inline  ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>::Reader getMembers() const;
   // Information about each member -- i.e. fields (for structs), enumerants (for enums), or
   // methods (for interfaces).
   //
   // This list is the same length and order as the corresponding list in the Node, i.e.
   // Node.struct.fields, Node.enum.enumerants, or Node.interface.methods.
-  inline bool hasMembers() const;
-  inline  ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>::Reader getMembers() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1170,29 +1170,29 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the Node which this info describes.
   inline  ::uint64_t getId();
   inline void setId( ::uint64_t value);
+  // ID of the Node which this info describes.
 
-  // The top-level doc comment for the Node.
   inline bool hasDocComment();
   inline  ::capnp::Text::Builder getDocComment();
   inline void setDocComment( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initDocComment(unsigned int size);
   inline void adoptDocComment(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownDocComment();
+  // The top-level doc comment for the Node.
 
-  // Information about each member -- i.e. fields (for structs), enumerants (for enums), or
-  // methods (for interfaces).
-  //
-  // This list is the same length and order as the corresponding list in the Node, i.e.
-  // Node.struct.fields, Node.enum.enumerants, or Node.interface.methods.
   inline bool hasMembers();
   inline  ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>::Builder getMembers();
   inline void setMembers( ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>::Builder initMembers(unsigned int size);
   inline void adoptMembers(::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::SourceInfo::Member,  ::capnp::Kind::STRUCT>> disownMembers();
+  // Information about each member -- i.e. fields (for structs), enumerants (for enums), or
+  // methods (for interfaces).
+  //
+  // This list is the same length and order as the corresponding list in the Node, i.e.
+  // Node.struct.fields, Node.enum.enumerants, or Node.interface.methods.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1237,9 +1237,9 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Doc comment on the member.
   inline bool hasDocComment() const;
   inline  ::capnp::Text::Reader getDocComment() const;
+  // Doc comment on the member.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1269,13 +1269,13 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Doc comment on the member.
   inline bool hasDocComment();
   inline  ::capnp::Text::Builder getDocComment();
   inline void setDocComment( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initDocComment(unsigned int size);
   inline void adoptDocComment(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownDocComment();
+  // Doc comment on the member.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1320,17 +1320,18 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Size of the data section, in words.
   inline  ::uint16_t getDataWordCount() const;
+  // Size of the data section, in words.
 
-  // Size of the pointer section, in pointers (which are one word each).
   inline  ::uint16_t getPointerCount() const;
+  // Size of the pointer section, in pointers (which are one word each).
 
+  inline  ::capnp::schema::ElementSize getPreferredListEncoding() const;
   // The preferred element size to use when encoding a list of this struct.  If this is anything
   // other than `inlineComposite` then the struct is one word or less in size and is a candidate
   // for list packing optimization.
-  inline  ::capnp::schema::ElementSize getPreferredListEncoding() const;
 
+  inline bool getIsGroup() const;
   // If true, then this "struct" node is actually not an independent node, but merely represents
   // some named union or group within a particular parent struct.  This node's scopeId refers
   // to the parent struct, which may itself be a union/group in yet another struct.
@@ -1341,8 +1342,8 @@ public:
   //
   // Note that a named union is considered a special kind of group -- in fact, a named union
   // is exactly equivalent to a group that contains nothing but an unnamed union.
-  inline bool getIsGroup() const;
 
+  inline  ::uint16_t getDiscriminantCount() const;
   // Number of fields in this struct which are members of an anonymous union, and thus may
   // overlap.  If this is non-zero, then a 16-bit discriminant is present indicating which
   // of the overlapping fields is active.  This can never be 1 -- if it is non-zero, it must be
@@ -1353,12 +1354,13 @@ public:
   // non-zero discriminant count.  Named unions, on the other hand, are equivalent to groups
   // containing unnamed unions.  So, a named union has its own independent schema node, with
   // `isGroup` = true.
-  inline  ::uint16_t getDiscriminantCount() const;
 
+  inline  ::uint32_t getDiscriminantOffset() const;
   // If `discriminantCount` is non-zero, this is the offset of the union discriminant, in
   // multiples of 16 bits.
-  inline  ::uint32_t getDiscriminantOffset() const;
 
+  inline bool hasFields() const;
+  inline  ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Reader getFields() const;
   // Fields defined within this scope (either the struct's top-level fields, or the fields of
   // a particular group; see `isGroup`).
   //
@@ -1368,8 +1370,6 @@ public:
   // protocol evolves, since it is not possible to insert or remove an earlier ordinal.
   // Therefore, for most use cases, if you want to identify a field by number, it may make the
   // most sense to use the field's index in this list rather than its ordinal.
-  inline bool hasFields() const;
-  inline  ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Reader getFields() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1399,20 +1399,22 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Size of the data section, in words.
   inline  ::uint16_t getDataWordCount();
   inline void setDataWordCount( ::uint16_t value);
+  // Size of the data section, in words.
 
-  // Size of the pointer section, in pointers (which are one word each).
   inline  ::uint16_t getPointerCount();
   inline void setPointerCount( ::uint16_t value);
+  // Size of the pointer section, in pointers (which are one word each).
 
+  inline  ::capnp::schema::ElementSize getPreferredListEncoding();
+  inline void setPreferredListEncoding( ::capnp::schema::ElementSize value);
   // The preferred element size to use when encoding a list of this struct.  If this is anything
   // other than `inlineComposite` then the struct is one word or less in size and is a candidate
   // for list packing optimization.
-  inline  ::capnp::schema::ElementSize getPreferredListEncoding();
-  inline void setPreferredListEncoding( ::capnp::schema::ElementSize value);
 
+  inline bool getIsGroup();
+  inline void setIsGroup(bool value);
   // If true, then this "struct" node is actually not an independent node, but merely represents
   // some named union or group within a particular parent struct.  This node's scopeId refers
   // to the parent struct, which may itself be a union/group in yet another struct.
@@ -1423,9 +1425,9 @@ public:
   //
   // Note that a named union is considered a special kind of group -- in fact, a named union
   // is exactly equivalent to a group that contains nothing but an unnamed union.
-  inline bool getIsGroup();
-  inline void setIsGroup(bool value);
 
+  inline  ::uint16_t getDiscriminantCount();
+  inline void setDiscriminantCount( ::uint16_t value);
   // Number of fields in this struct which are members of an anonymous union, and thus may
   // overlap.  If this is non-zero, then a 16-bit discriminant is present indicating which
   // of the overlapping fields is active.  This can never be 1 -- if it is non-zero, it must be
@@ -1436,14 +1438,18 @@ public:
   // non-zero discriminant count.  Named unions, on the other hand, are equivalent to groups
   // containing unnamed unions.  So, a named union has its own independent schema node, with
   // `isGroup` = true.
-  inline  ::uint16_t getDiscriminantCount();
-  inline void setDiscriminantCount( ::uint16_t value);
 
-  // If `discriminantCount` is non-zero, this is the offset of the union discriminant, in
-  // multiples of 16 bits.
   inline  ::uint32_t getDiscriminantOffset();
   inline void setDiscriminantOffset( ::uint32_t value);
+  // If `discriminantCount` is non-zero, this is the offset of the union discriminant, in
+  // multiples of 16 bits.
 
+  inline bool hasFields();
+  inline  ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Builder getFields();
+  inline void setFields( ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Reader value);
+  inline  ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Builder initFields(unsigned int size);
+  inline void adoptFields(::capnp::Orphan< ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>>&& value);
+  inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>> disownFields();
   // Fields defined within this scope (either the struct's top-level fields, or the fields of
   // a particular group; see `isGroup`).
   //
@@ -1453,12 +1459,6 @@ public:
   // protocol evolves, since it is not possible to insert or remove an earlier ordinal.
   // Therefore, for most use cases, if you want to identify a field by number, it may make the
   // most sense to use the field's index in this list rather than its ordinal.
-  inline bool hasFields();
-  inline  ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Builder getFields();
-  inline void setFields( ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Reader value);
-  inline  ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>::Builder initFields(unsigned int size);
-  inline void adoptFields(::capnp::Orphan< ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>>&& value);
-  inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Field,  ::capnp::Kind::STRUCT>> disownFields();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1503,9 +1503,9 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Enumerants ordered by numeric value (ordinal).
   inline bool hasEnumerants() const;
   inline  ::capnp::List< ::capnp::schema::Enumerant,  ::capnp::Kind::STRUCT>::Reader getEnumerants() const;
+  // Enumerants ordered by numeric value (ordinal).
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1535,13 +1535,13 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Enumerants ordered by numeric value (ordinal).
   inline bool hasEnumerants();
   inline  ::capnp::List< ::capnp::schema::Enumerant,  ::capnp::Kind::STRUCT>::Builder getEnumerants();
   inline void setEnumerants( ::capnp::List< ::capnp::schema::Enumerant,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Enumerant,  ::capnp::Kind::STRUCT>::Builder initEnumerants(unsigned int size);
   inline void adoptEnumerants(::capnp::Orphan< ::capnp::List< ::capnp::schema::Enumerant,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Enumerant,  ::capnp::Kind::STRUCT>> disownEnumerants();
+  // Enumerants ordered by numeric value (ordinal).
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1586,13 +1586,13 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Methods ordered by ordinal.
   inline bool hasMethods() const;
   inline  ::capnp::List< ::capnp::schema::Method,  ::capnp::Kind::STRUCT>::Reader getMethods() const;
+  // Methods ordered by ordinal.
 
-  // Superclasses of this interface.
   inline bool hasSuperclasses() const;
   inline  ::capnp::List< ::capnp::schema::Superclass,  ::capnp::Kind::STRUCT>::Reader getSuperclasses() const;
+  // Superclasses of this interface.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1622,21 +1622,21 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Methods ordered by ordinal.
   inline bool hasMethods();
   inline  ::capnp::List< ::capnp::schema::Method,  ::capnp::Kind::STRUCT>::Builder getMethods();
   inline void setMethods( ::capnp::List< ::capnp::schema::Method,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Method,  ::capnp::Kind::STRUCT>::Builder initMethods(unsigned int size);
   inline void adoptMethods(::capnp::Orphan< ::capnp::List< ::capnp::schema::Method,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Method,  ::capnp::Kind::STRUCT>> disownMethods();
+  // Methods ordered by ordinal.
 
-  // Superclasses of this interface.
   inline bool hasSuperclasses();
   inline  ::capnp::List< ::capnp::schema::Superclass,  ::capnp::Kind::STRUCT>::Builder getSuperclasses();
   inline void setSuperclasses( ::capnp::List< ::capnp::schema::Superclass,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Superclass,  ::capnp::Kind::STRUCT>::Builder initSuperclasses(unsigned int size);
   inline void adoptSuperclasses(::capnp::Orphan< ::capnp::List< ::capnp::schema::Superclass,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Superclass,  ::capnp::Kind::STRUCT>> disownSuperclasses();
+  // Superclasses of this interface.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1920,20 +1920,20 @@ public:
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
 
+  inline  ::uint16_t getCodeOrder() const;
   // Indicates where this member appeared in the code, relative to other members.
   // Code ordering may have semantic relevance -- programmers tend to place related fields
   // together.  So, using code ordering makes sense in human-readable formats where ordering is
   // otherwise irrelevant, like JSON.  The values of codeOrder are tightly-packed, so the maximum
   // value is count(members) - 1.  Fields that are members of a union are only ordered relative to
   // the other members of that union, so the maximum value there is count(union.members).
-  inline  ::uint16_t getCodeOrder() const;
 
   inline bool hasAnnotations() const;
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Reader getAnnotations() const;
 
+  inline  ::uint16_t getDiscriminantValue() const;
   // If the field is in a union, this is the value which the union's discriminant should take when
   // the field is active.  If the field is not in a union, this is 0xffff.
-  inline  ::uint16_t getDiscriminantValue() const;
 
   inline bool isSlot() const;
   inline typename Slot::Reader getSlot() const;
@@ -1943,9 +1943,9 @@ public:
 
   inline typename Ordinal::Reader getOrdinal() const;
 
-  // Doc comment on the field.
   inline bool hasDocComment() const;
   inline  ::capnp::Text::Reader getDocComment() const;
+  // Doc comment on the field.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1983,14 +1983,14 @@ public:
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
 
+  inline  ::uint16_t getCodeOrder();
+  inline void setCodeOrder( ::uint16_t value);
   // Indicates where this member appeared in the code, relative to other members.
   // Code ordering may have semantic relevance -- programmers tend to place related fields
   // together.  So, using code ordering makes sense in human-readable formats where ordering is
   // otherwise irrelevant, like JSON.  The values of codeOrder are tightly-packed, so the maximum
   // value is count(members) - 1.  Fields that are members of a union are only ordered relative to
   // the other members of that union, so the maximum value there is count(union.members).
-  inline  ::uint16_t getCodeOrder();
-  inline void setCodeOrder( ::uint16_t value);
 
   inline bool hasAnnotations();
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Builder getAnnotations();
@@ -1999,10 +1999,10 @@ public:
   inline void adoptAnnotations(::capnp::Orphan< ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>> disownAnnotations();
 
-  // If the field is in a union, this is the value which the union's discriminant should take when
-  // the field is active.  If the field is not in a union, this is 0xffff.
   inline  ::uint16_t getDiscriminantValue();
   inline void setDiscriminantValue( ::uint16_t value);
+  // If the field is in a union, this is the value which the union's discriminant should take when
+  // the field is active.  If the field is not in a union, this is 0xffff.
 
   inline bool isSlot();
   inline typename Slot::Builder getSlot();
@@ -2015,13 +2015,13 @@ public:
   inline typename Ordinal::Builder getOrdinal();
   inline typename Ordinal::Builder initOrdinal();
 
-  // Doc comment on the field.
   inline bool hasDocComment();
   inline  ::capnp::Text::Builder getDocComment();
   inline void setDocComment( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initDocComment(unsigned int size);
   inline void adoptDocComment(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownDocComment();
+  // Doc comment on the field.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2067,10 +2067,10 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getOffset() const;
   // Offset, in units of the field's size, from the beginning of the section in which the field
   // resides.  E.g. for a UInt32 field, multiply this by 4 to get the byte offset from the
   // beginning of the data section.
-  inline  ::uint32_t getOffset() const;
 
   inline bool hasType() const;
   inline  ::capnp::schema::Type::Reader getType() const;
@@ -2078,11 +2078,11 @@ public:
   inline bool hasDefaultValue() const;
   inline  ::capnp::schema::Value::Reader getDefaultValue() const;
 
+  inline bool getHadExplicitDefault() const;
   // Whether the default value was specified explicitly.  Non-explicit default values are always
   // zero or empty values.  Usually, whether the default value was explicit shouldn't matter.
   // The main use case for this flag is for structs representing method parameters:
   // explicitly-defaulted parameters may be allowed to be omitted when calling the method.
-  inline bool getHadExplicitDefault() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2112,11 +2112,11 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getOffset();
+  inline void setOffset( ::uint32_t value);
   // Offset, in units of the field's size, from the beginning of the section in which the field
   // resides.  E.g. for a UInt32 field, multiply this by 4 to get the byte offset from the
   // beginning of the data section.
-  inline  ::uint32_t getOffset();
-  inline void setOffset( ::uint32_t value);
 
   inline bool hasType();
   inline  ::capnp::schema::Type::Builder getType();
@@ -2132,12 +2132,12 @@ public:
   inline void adoptDefaultValue(::capnp::Orphan< ::capnp::schema::Value>&& value);
   inline ::capnp::Orphan< ::capnp::schema::Value> disownDefaultValue();
 
+  inline bool getHadExplicitDefault();
+  inline void setHadExplicitDefault(bool value);
   // Whether the default value was specified explicitly.  Non-explicit default values are always
   // zero or empty values.  Usually, whether the default value was explicit shouldn't matter.
   // The main use case for this flag is for structs representing method parameters:
   // explicitly-defaulted parameters may be allowed to be omitted when calling the method.
-  inline bool getHadExplicitDefault();
-  inline void setHadExplicitDefault(bool value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2184,8 +2184,8 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // The ID of the group's node.
   inline  ::uint64_t getTypeId() const;
+  // The ID of the group's node.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2215,9 +2215,9 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // The ID of the group's node.
   inline  ::uint64_t getTypeId();
   inline void setTypeId( ::uint64_t value);
+  // The ID of the group's node.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2266,12 +2266,12 @@ public:
   inline bool isImplicit() const;
   inline  ::capnp::Void getImplicit() const;
 
+  inline bool isExplicit() const;
+  inline  ::uint16_t getExplicit() const;
   // The original ordinal number given to the field.  You probably should NOT use this; if you need
   // a numeric identifier for a field, use its position within the field array for its scope.
   // The ordinal is given here mainly just so that the original schema text can be reproduced given
   // the compiled version -- i.e. so that `capnp compile -ocapnp` can do its job.
-  inline bool isExplicit() const;
-  inline  ::uint16_t getExplicit() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2306,13 +2306,13 @@ public:
   inline  ::capnp::Void getImplicit();
   inline void setImplicit( ::capnp::Void value = ::capnp::VOID);
 
+  inline bool isExplicit();
+  inline  ::uint16_t getExplicit();
+  inline void setExplicit( ::uint16_t value);
   // The original ordinal number given to the field.  You probably should NOT use this; if you need
   // a numeric identifier for a field, use its position within the field array for its scope.
   // The ordinal is given here mainly just so that the original schema text can be reproduced given
   // the compiled version -- i.e. so that `capnp compile -ocapnp` can do its job.
-  inline bool isExplicit();
-  inline  ::uint16_t getExplicit();
-  inline void setExplicit( ::uint16_t value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2360,9 +2360,9 @@ public:
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
 
+  inline  ::uint16_t getCodeOrder() const;
   // Specifies order in which the enumerants were declared in the code.
   // Like Struct.Field.codeOrder.
-  inline  ::uint16_t getCodeOrder() const;
 
   inline bool hasAnnotations() const;
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Reader getAnnotations() const;
@@ -2402,10 +2402,10 @@ public:
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
 
-  // Specifies order in which the enumerants were declared in the code.
-  // Like Struct.Field.codeOrder.
   inline  ::uint16_t getCodeOrder();
   inline void setCodeOrder( ::uint16_t value);
+  // Specifies order in which the enumerants were declared in the code.
+  // Like Struct.Field.codeOrder.
 
   inline bool hasAnnotations();
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Builder getAnnotations();
@@ -2547,10 +2547,11 @@ public:
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
 
+  inline  ::uint16_t getCodeOrder() const;
   // Specifies order in which the methods were declared in the code.
   // Like Struct.Field.codeOrder.
-  inline  ::uint16_t getCodeOrder() const;
 
+  inline  ::uint64_t getParamStructType() const;
   // ID of the parameter struct type.  If a named parameter list was specified in the method
   // declaration (rather than a single struct parameter type) then a corresponding struct type is
   // auto-generated.  Such an auto-generated type will not be listed in the interface's
@@ -2558,26 +2559,25 @@ public:
   // (Awkwardly, it does of course inherit generic parameters from the method's scope, which makes
   // this a situation where you can't just climb the scope chain to find where a particular
   // generic parameter was introduced. Making the `scopeId` zero was a mistake.)
-  inline  ::uint64_t getParamStructType() const;
 
-  // ID of the return struct type; similar to `paramStructType`.
   inline  ::uint64_t getResultStructType() const;
+  // ID of the return struct type; similar to `paramStructType`.
 
   inline bool hasAnnotations() const;
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Reader getAnnotations() const;
 
-  // Brand of param struct type.
   inline bool hasParamBrand() const;
   inline  ::capnp::schema::Brand::Reader getParamBrand() const;
+  // Brand of param struct type.
 
-  // Brand of result struct type.
   inline bool hasResultBrand() const;
   inline  ::capnp::schema::Brand::Reader getResultBrand() const;
+  // Brand of result struct type.
 
-  // The parameters listed in [] (typically, type / generic parameters), whose bindings are intended
-  // to be inferred rather than specified explicitly, although not all languages support this.
   inline bool hasImplicitParameters() const;
   inline  ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Reader getImplicitParameters() const;
+  // The parameters listed in [] (typically, type / generic parameters), whose bindings are intended
+  // to be inferred rather than specified explicitly, although not all languages support this.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -2614,11 +2614,13 @@ public:
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
 
-  // Specifies order in which the methods were declared in the code.
-  // Like Struct.Field.codeOrder.
   inline  ::uint16_t getCodeOrder();
   inline void setCodeOrder( ::uint16_t value);
+  // Specifies order in which the methods were declared in the code.
+  // Like Struct.Field.codeOrder.
 
+  inline  ::uint64_t getParamStructType();
+  inline void setParamStructType( ::uint64_t value);
   // ID of the parameter struct type.  If a named parameter list was specified in the method
   // declaration (rather than a single struct parameter type) then a corresponding struct type is
   // auto-generated.  Such an auto-generated type will not be listed in the interface's
@@ -2626,12 +2628,10 @@ public:
   // (Awkwardly, it does of course inherit generic parameters from the method's scope, which makes
   // this a situation where you can't just climb the scope chain to find where a particular
   // generic parameter was introduced. Making the `scopeId` zero was a mistake.)
-  inline  ::uint64_t getParamStructType();
-  inline void setParamStructType( ::uint64_t value);
 
-  // ID of the return struct type; similar to `paramStructType`.
   inline  ::uint64_t getResultStructType();
   inline void setResultStructType( ::uint64_t value);
+  // ID of the return struct type; similar to `paramStructType`.
 
   inline bool hasAnnotations();
   inline  ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>::Builder getAnnotations();
@@ -2640,30 +2640,30 @@ public:
   inline void adoptAnnotations(::capnp::Orphan< ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Annotation,  ::capnp::Kind::STRUCT>> disownAnnotations();
 
-  // Brand of param struct type.
   inline bool hasParamBrand();
   inline  ::capnp::schema::Brand::Builder getParamBrand();
   inline void setParamBrand( ::capnp::schema::Brand::Reader value);
   inline  ::capnp::schema::Brand::Builder initParamBrand();
   inline void adoptParamBrand(::capnp::Orphan< ::capnp::schema::Brand>&& value);
   inline ::capnp::Orphan< ::capnp::schema::Brand> disownParamBrand();
+  // Brand of param struct type.
 
-  // Brand of result struct type.
   inline bool hasResultBrand();
   inline  ::capnp::schema::Brand::Builder getResultBrand();
   inline void setResultBrand( ::capnp::schema::Brand::Reader value);
   inline  ::capnp::schema::Brand::Builder initResultBrand();
   inline void adoptResultBrand(::capnp::Orphan< ::capnp::schema::Brand>&& value);
   inline ::capnp::Orphan< ::capnp::schema::Brand> disownResultBrand();
+  // Brand of result struct type.
 
-  // The parameters listed in [] (typically, type / generic parameters), whose bindings are intended
-  // to be inferred rather than specified explicitly, although not all languages support this.
   inline bool hasImplicitParameters();
   inline  ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Builder getImplicitParameters();
   inline void setImplicitParameters( ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>::Builder initImplicitParameters(unsigned int size);
   inline void adoptImplicitParameters(::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::Parameter,  ::capnp::Kind::STRUCT>> disownImplicitParameters();
+  // The parameters listed in [] (typically, type / generic parameters), whose bindings are intended
+  // to be inferred rather than specified explicitly, although not all languages support this.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3354,21 +3354,21 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  // truly AnyPointer
   inline bool isAnyKind() const;
   inline  ::capnp::Void getAnyKind() const;
+  // truly AnyPointer
 
-  // AnyStruct
   inline bool isStruct() const;
   inline  ::capnp::Void getStruct() const;
+  // AnyStruct
 
-  // AnyList
   inline bool isList() const;
   inline  ::capnp::Void getList() const;
+  // AnyList
 
-  // Capability
   inline bool isCapability() const;
   inline  ::capnp::Void getCapability() const;
+  // Capability
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3399,25 +3399,25 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  // truly AnyPointer
   inline bool isAnyKind();
   inline  ::capnp::Void getAnyKind();
   inline void setAnyKind( ::capnp::Void value = ::capnp::VOID);
+  // truly AnyPointer
 
-  // AnyStruct
   inline bool isStruct();
   inline  ::capnp::Void getStruct();
   inline void setStruct( ::capnp::Void value = ::capnp::VOID);
+  // AnyStruct
 
-  // AnyList
   inline bool isList();
   inline  ::capnp::Void getList();
   inline void setList( ::capnp::Void value = ::capnp::VOID);
+  // AnyList
 
-  // Capability
   inline bool isCapability();
   inline  ::capnp::Void getCapability();
   inline void setCapability( ::capnp::Void value = ::capnp::VOID);
+  // Capability
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3462,12 +3462,12 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint64_t getScopeId() const;
   // ID of the generic type whose parameter we're referencing. This should be a parent of the
   // current scope.
-  inline  ::uint64_t getScopeId() const;
 
-  // Index of the parameter within the generic type's parameter list.
   inline  ::uint16_t getParameterIndex() const;
+  // Index of the parameter within the generic type's parameter list.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3497,14 +3497,14 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the generic type whose parameter we're referencing. This should be a parent of the
-  // current scope.
   inline  ::uint64_t getScopeId();
   inline void setScopeId( ::uint64_t value);
+  // ID of the generic type whose parameter we're referencing. This should be a parent of the
+  // current scope.
 
-  // Index of the parameter within the generic type's parameter list.
   inline  ::uint16_t getParameterIndex();
   inline void setParameterIndex( ::uint16_t value);
+  // Index of the parameter within the generic type's parameter list.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3625,11 +3625,11 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline bool hasScopes() const;
+  inline  ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>::Reader getScopes() const;
   // For each of the target type and each of its parent scopes, a parameterization may be included
   // in this list. If no parameterization is included for a particular relevant scope, then either
   // that scope has no parameters or all parameters should be considered to be `AnyPointer`.
-  inline bool hasScopes() const;
-  inline  ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>::Reader getScopes() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3659,15 +3659,15 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // For each of the target type and each of its parent scopes, a parameterization may be included
-  // in this list. If no parameterization is included for a particular relevant scope, then either
-  // that scope has no parameters or all parameters should be considered to be `AnyPointer`.
   inline bool hasScopes();
   inline  ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>::Builder getScopes();
   inline void setScopes( ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>::Builder initScopes(unsigned int size);
   inline void adoptScopes(::capnp::Orphan< ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Brand::Scope,  ::capnp::Kind::STRUCT>> disownScopes();
+  // For each of the target type and each of its parent scopes, a parameterization may be included
+  // in this list. If no parameterization is included for a particular relevant scope, then either
+  // that scope has no parameters or all parameters should be considered to be `AnyPointer`.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3713,18 +3713,18 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
-  // ID of the scope to which these params apply.
   inline  ::uint64_t getScopeId() const;
+  // ID of the scope to which these params apply.
 
-  // List of parameter bindings.
   inline bool isBind() const;
   inline bool hasBind() const;
   inline  ::capnp::List< ::capnp::schema::Brand::Binding,  ::capnp::Kind::STRUCT>::Reader getBind() const;
+  // List of parameter bindings.
 
-  // The place where this Brand appears is actually within this scope or a sub-scope,
-  // and the bindings for this scope should be inherited from the reference point.
   inline bool isInherit() const;
   inline  ::capnp::Void getInherit() const;
+  // The place where this Brand appears is actually within this scope or a sub-scope,
+  // and the bindings for this scope should be inherited from the reference point.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -3755,11 +3755,10 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
-  // ID of the scope to which these params apply.
   inline  ::uint64_t getScopeId();
   inline void setScopeId( ::uint64_t value);
+  // ID of the scope to which these params apply.
 
-  // List of parameter bindings.
   inline bool isBind();
   inline bool hasBind();
   inline  ::capnp::List< ::capnp::schema::Brand::Binding,  ::capnp::Kind::STRUCT>::Builder getBind();
@@ -3767,12 +3766,13 @@ public:
   inline  ::capnp::List< ::capnp::schema::Brand::Binding,  ::capnp::Kind::STRUCT>::Builder initBind(unsigned int size);
   inline void adoptBind(::capnp::Orphan< ::capnp::List< ::capnp::schema::Brand::Binding,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Brand::Binding,  ::capnp::Kind::STRUCT>> disownBind();
+  // List of parameter bindings.
 
-  // The place where this Brand appears is actually within this scope or a sub-scope,
-  // and the bindings for this scope should be inherited from the reference point.
   inline bool isInherit();
   inline  ::capnp::Void getInherit();
   inline void setInherit( ::capnp::Void value = ::capnp::VOID);
+  // The place where this Brand appears is actually within this scope or a sub-scope,
+  // and the bindings for this scope should be inherited from the reference point.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3965,10 +3965,10 @@ public:
   inline bool hasStruct() const;
   inline ::capnp::AnyPointer::Reader getStruct() const;
 
-  // The only interface value that can be represented statically is "null", whose methods always
-  // throw exceptions.
   inline bool isInterface() const;
   inline  ::capnp::Void getInterface() const;
+  // The only interface value that can be represented statically is "null", whose methods always
+  // throw exceptions.
 
   inline bool isAnyPointer() const;
   inline bool hasAnyPointer() const;
@@ -4081,11 +4081,11 @@ public:
   inline ::capnp::AnyPointer::Builder getStruct();
   inline ::capnp::AnyPointer::Builder initStruct();
 
-  // The only interface value that can be represented statically is "null", whose methods always
-  // throw exceptions.
   inline bool isInterface();
   inline  ::capnp::Void getInterface();
   inline void setInterface( ::capnp::Void value = ::capnp::VOID);
+  // The only interface value that can be represented statically is "null", whose methods always
+  // throw exceptions.
 
   inline bool isAnyPointer();
   inline bool hasAnyPointer();
@@ -4135,17 +4135,17 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // ID of the annotation node.
   inline  ::uint64_t getId() const;
+  // ID of the annotation node.
 
   inline bool hasValue() const;
   inline  ::capnp::schema::Value::Reader getValue() const;
 
+  inline bool hasBrand() const;
+  inline  ::capnp::schema::Brand::Reader getBrand() const;
   // Brand of the annotation.
   //
   // Note that the annotation itself is not allowed to be parameterized, but its scope might be.
-  inline bool hasBrand() const;
-  inline  ::capnp::schema::Brand::Reader getBrand() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -4175,9 +4175,9 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the annotation node.
   inline  ::uint64_t getId();
   inline void setId( ::uint64_t value);
+  // ID of the annotation node.
 
   inline bool hasValue();
   inline  ::capnp::schema::Value::Builder getValue();
@@ -4186,15 +4186,15 @@ public:
   inline void adoptValue(::capnp::Orphan< ::capnp::schema::Value>&& value);
   inline ::capnp::Orphan< ::capnp::schema::Value> disownValue();
 
-  // Brand of the annotation.
-  //
-  // Note that the annotation itself is not allowed to be parameterized, but its scope might be.
   inline bool hasBrand();
   inline  ::capnp::schema::Brand::Builder getBrand();
   inline void setBrand( ::capnp::schema::Brand::Reader value);
   inline  ::capnp::schema::Brand::Builder initBrand();
   inline void adoptBrand(::capnp::Orphan< ::capnp::schema::Brand>&& value);
   inline ::capnp::Orphan< ::capnp::schema::Brand> disownBrand();
+  // Brand of the annotation.
+  //
+  // Note that the annotation itself is not allowed to be parameterized, but its scope might be.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -4327,28 +4327,28 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // All nodes parsed by the compiler, including for the files on the command line and their
-  // imports.
   inline bool hasNodes() const;
   inline  ::capnp::List< ::capnp::schema::Node,  ::capnp::Kind::STRUCT>::Reader getNodes() const;
+  // All nodes parsed by the compiler, including for the files on the command line and their
+  // imports.
 
-  // Files which were listed on the command line.
   inline bool hasRequestedFiles() const;
   inline  ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile,  ::capnp::Kind::STRUCT>::Reader getRequestedFiles() const;
+  // Files which were listed on the command line.
 
+  inline bool hasCapnpVersion() const;
+  inline  ::capnp::schema::CapnpVersion::Reader getCapnpVersion() const;
   // Version of the `capnp` executable. Generally, code generators should ignore this, but the code
   // generators that ship with `capnp` itself will print a warning if this mismatches since that
   // probably indicates something is misconfigured.
   //
   // The first version of 'capnp' to set this was 0.6.0. So, if it's missing, the compiler version
   // is older than that.
-  inline bool hasCapnpVersion() const;
-  inline  ::capnp::schema::CapnpVersion::Reader getCapnpVersion() const;
 
-  // Information about the original source code for each node, where available. This array may be
-  // omitted or may be missing some nodes if no info is available for them.
   inline bool hasSourceInfo() const;
   inline  ::capnp::List< ::capnp::schema::Node::SourceInfo,  ::capnp::Kind::STRUCT>::Reader getSourceInfo() const;
+  // Information about the original source code for each node, where available. This array may be
+  // omitted or may be missing some nodes if no info is available for them.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -4378,44 +4378,44 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // All nodes parsed by the compiler, including for the files on the command line and their
-  // imports.
   inline bool hasNodes();
   inline  ::capnp::List< ::capnp::schema::Node,  ::capnp::Kind::STRUCT>::Builder getNodes();
   inline void setNodes( ::capnp::List< ::capnp::schema::Node,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Node,  ::capnp::Kind::STRUCT>::Builder initNodes(unsigned int size);
   inline void adoptNodes(::capnp::Orphan< ::capnp::List< ::capnp::schema::Node,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Node,  ::capnp::Kind::STRUCT>> disownNodes();
+  // All nodes parsed by the compiler, including for the files on the command line and their
+  // imports.
 
-  // Files which were listed on the command line.
   inline bool hasRequestedFiles();
   inline  ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile,  ::capnp::Kind::STRUCT>::Builder getRequestedFiles();
   inline void setRequestedFiles( ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile,  ::capnp::Kind::STRUCT>::Builder initRequestedFiles(unsigned int size);
   inline void adoptRequestedFiles(::capnp::Orphan< ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile,  ::capnp::Kind::STRUCT>> disownRequestedFiles();
+  // Files which were listed on the command line.
 
-  // Version of the `capnp` executable. Generally, code generators should ignore this, but the code
-  // generators that ship with `capnp` itself will print a warning if this mismatches since that
-  // probably indicates something is misconfigured.
-  //
-  // The first version of 'capnp' to set this was 0.6.0. So, if it's missing, the compiler version
-  // is older than that.
   inline bool hasCapnpVersion();
   inline  ::capnp::schema::CapnpVersion::Builder getCapnpVersion();
   inline void setCapnpVersion( ::capnp::schema::CapnpVersion::Reader value);
   inline  ::capnp::schema::CapnpVersion::Builder initCapnpVersion();
   inline void adoptCapnpVersion(::capnp::Orphan< ::capnp::schema::CapnpVersion>&& value);
   inline ::capnp::Orphan< ::capnp::schema::CapnpVersion> disownCapnpVersion();
+  // Version of the `capnp` executable. Generally, code generators should ignore this, but the code
+  // generators that ship with `capnp` itself will print a warning if this mismatches since that
+  // probably indicates something is misconfigured.
+  //
+  // The first version of 'capnp' to set this was 0.6.0. So, if it's missing, the compiler version
+  // is older than that.
 
-  // Information about the original source code for each node, where available. This array may be
-  // omitted or may be missing some nodes if no info is available for them.
   inline bool hasSourceInfo();
   inline  ::capnp::List< ::capnp::schema::Node::SourceInfo,  ::capnp::Kind::STRUCT>::Builder getSourceInfo();
   inline void setSourceInfo( ::capnp::List< ::capnp::schema::Node::SourceInfo,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::Node::SourceInfo,  ::capnp::Kind::STRUCT>::Builder initSourceInfo(unsigned int size);
   inline void adoptSourceInfo(::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::SourceInfo,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::Node::SourceInfo,  ::capnp::Kind::STRUCT>> disownSourceInfo();
+  // Information about the original source code for each node, where available. This array may be
+  // omitted or may be missing some nodes if no info is available for them.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -4461,17 +4461,17 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // ID of the file.
   inline  ::uint64_t getId() const;
+  // ID of the file.
 
-  // Name of the file as it appeared on the command-line (minus the src-prefix).  You may use
-  // this to decide where to write the output.
   inline bool hasFilename() const;
   inline  ::capnp::Text::Reader getFilename() const;
+  // Name of the file as it appeared on the command-line (minus the src-prefix).  You may use
+  // this to decide where to write the output.
 
-  // List of all imported paths seen in this file.
   inline bool hasImports() const;
   inline  ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile::Import,  ::capnp::Kind::STRUCT>::Reader getImports() const;
+  // List of all imported paths seen in this file.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -4501,26 +4501,26 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the file.
   inline  ::uint64_t getId();
   inline void setId( ::uint64_t value);
+  // ID of the file.
 
-  // Name of the file as it appeared on the command-line (minus the src-prefix).  You may use
-  // this to decide where to write the output.
   inline bool hasFilename();
   inline  ::capnp::Text::Builder getFilename();
   inline void setFilename( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initFilename(unsigned int size);
   inline void adoptFilename(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownFilename();
+  // Name of the file as it appeared on the command-line (minus the src-prefix).  You may use
+  // this to decide where to write the output.
 
-  // List of all imported paths seen in this file.
   inline bool hasImports();
   inline  ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile::Import,  ::capnp::Kind::STRUCT>::Builder getImports();
   inline void setImports( ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile::Import,  ::capnp::Kind::STRUCT>::Reader value);
   inline  ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile::Import,  ::capnp::Kind::STRUCT>::Builder initImports(unsigned int size);
   inline void adoptImports(::capnp::Orphan< ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile::Import,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::schema::CodeGeneratorRequest::RequestedFile::Import,  ::capnp::Kind::STRUCT>> disownImports();
+  // List of all imported paths seen in this file.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -4565,17 +4565,17 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // ID of the imported file.
   inline  ::uint64_t getId() const;
+  // ID of the imported file.
 
+  inline bool hasName() const;
+  inline  ::capnp::Text::Reader getName() const;
   // Name which *this* file used to refer to the foreign file.  This may be a relative name.
   // This information is provided because it might be useful for code generation, e.g. to
   // generate #include directives in C++.  We don't put this in Node.file because this
   // information is only meaningful at compile time anyway.
   //
   // (On Zooko's triangle, this is the import's petname according to the importing file.)
-  inline bool hasName() const;
-  inline  ::capnp::Text::Reader getName() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -4605,22 +4605,22 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // ID of the imported file.
   inline  ::uint64_t getId();
   inline void setId( ::uint64_t value);
+  // ID of the imported file.
 
-  // Name which *this* file used to refer to the foreign file.  This may be a relative name.
-  // This information is provided because it might be useful for code generation, e.g. to
-  // generate #include directives in C++.  We don't put this in Node.file because this
-  // information is only meaningful at compile time anyway.
-  //
-  // (On Zooko's triangle, this is the import's petname according to the importing file.)
   inline bool hasName();
   inline  ::capnp::Text::Builder getName();
   inline void setName( ::capnp::Text::Reader value);
   inline  ::capnp::Text::Builder initName(unsigned int size);
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
+  // Name which *this* file used to refer to the foreign file.  This may be a relative name.
+  // This information is provided because it might be useful for code generation, e.g. to
+  // generate #include directives in C++.  We don't put this in Node.file because this
+  // information is only meaningful at compile time anyway.
+  //
+  // (On Zooko's triangle, this is the import's petname according to the importing file.)
 
 private:
   ::capnp::_::StructBuilder _builder;

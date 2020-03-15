@@ -1417,16 +1417,16 @@ private:
     if (kind == FieldKind::PRIMITIVE) {
       return FieldText {
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
-            "  inline ", type, " get", titleCase, "() const;\n"
+            "  inline ", type, " get", titleCase, "() const;\n",
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline ", type, " get", titleCase, "();\n"
-            "  inline void set", titleCase, "(", type, " value", setterDefault, ");\n"
+            "  inline void set", titleCase, "(", type, " value", setterDefault, ");\n",
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(),
@@ -1461,16 +1461,15 @@ private:
 
       return FieldText {
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n"
             "#if !CAPNP_LITE\n"
             "  inline ", clientType, " get", titleCase, "() const;\n"
-            "#endif  // !CAPNP_LITE\n"
+            "#endif  // !CAPNP_LITE\n",
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n"
             "#if !CAPNP_LITE\n"
@@ -1479,7 +1478,8 @@ private:
             "  inline void set", titleCase, "(", clientType, "& value);\n",
             "  inline void adopt", titleCase, "(::capnp::Orphan<", type, ">&& value);\n"
             "  inline ::capnp::Orphan<", type, "> disown", titleCase, "();\n"
-            "#endif  // !CAPNP_LITE\n"
+            "#endif  // !CAPNP_LITE\n",
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(
@@ -1550,18 +1550,18 @@ private:
     } else if (kind == FieldKind::ANY_POINTER) {
       return FieldText {
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n"
-            "  inline ::capnp::AnyPointer::Reader get", titleCase, "() const;\n"
+            "  inline ::capnp::AnyPointer::Reader get", titleCase, "() const;\n",
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n"
             "  inline ::capnp::AnyPointer::Builder get", titleCase, "();\n"
-            "  inline ::capnp::AnyPointer::Builder init", titleCase, "();\n"
+            "  inline ::capnp::AnyPointer::Builder init", titleCase, "();\n",
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(),
@@ -1699,16 +1699,15 @@ private:
 
       return FieldText {
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n",
             COND(shouldExcludeInLiteMode, "#if !CAPNP_LITE\n"),
             "  inline ", readerType, " get", titleCase, "() const;\n",
             COND(shouldExcludeInLiteMode, "#endif  // !CAPNP_LITE\n"),
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(
-            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n",
             COND(shouldExcludeInLiteMode, "#if !CAPNP_LITE\n"),
@@ -1731,6 +1730,7 @@ private:
             "  inline void adopt", titleCase, "(::capnp::Orphan<", type, ">&& value);\n"
             "  inline ::capnp::Orphan<", type, "> disown", titleCase, "();\n",
             COND(shouldExcludeInLiteMode, "#endif  // !CAPNP_LITE\n"),
+            docToCodeComment(proto.getDocComment()),
             "\n"),
 
         kj::strTree(

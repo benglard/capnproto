@@ -254,8 +254,8 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // The ID from `JoinKeyPart`.
   inline  ::uint32_t getJoinId() const;
+  // The ID from `JoinKeyPart`.
 
 private:
   ::capnp::_::StructReader _reader;
@@ -285,9 +285,9 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // The ID from `JoinKeyPart`.
   inline  ::uint32_t getJoinId();
   inline void setJoinId( ::uint32_t value);
+  // The ID from `JoinKeyPart`.
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -474,15 +474,15 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  inline  ::uint32_t getJoinId() const;
   // A number identifying this join, chosen by the sender.  May be reused once `Finish` messages are
   // sent corresponding to all of the `Join` messages.
-  inline  ::uint32_t getJoinId() const;
 
-  // The number of capabilities to be joined.
   inline  ::uint16_t getPartCount() const;
+  // The number of capabilities to be joined.
 
-  // Which part this request targets -- a number in the range [0, partCount).
   inline  ::uint16_t getPartNum() const;
+  // Which part this request targets -- a number in the range [0, partCount).
 
 private:
   ::capnp::_::StructReader _reader;
@@ -512,18 +512,18 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // A number identifying this join, chosen by the sender.  May be reused once `Finish` messages are
-  // sent corresponding to all of the `Join` messages.
   inline  ::uint32_t getJoinId();
   inline void setJoinId( ::uint32_t value);
+  // A number identifying this join, chosen by the sender.  May be reused once `Finish` messages are
+  // sent corresponding to all of the `Join` messages.
 
-  // The number of capabilities to be joined.
   inline  ::uint16_t getPartCount();
   inline void setPartCount( ::uint16_t value);
+  // The number of capabilities to be joined.
 
-  // Which part this request targets -- a number in the range [0, partCount).
   inline  ::uint16_t getPartNum();
   inline void setPartNum( ::uint16_t value);
+  // Which part this request targets -- a number in the range [0, partCount).
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -568,19 +568,19 @@ public:
   }
 #endif  // !CAPNP_LITE
 
-  // Matches `JoinKeyPart`.
   inline  ::uint32_t getJoinId() const;
+  // Matches `JoinKeyPart`.
 
+  inline bool getSucceeded() const;
   // All JoinResults in the set will have the same value for `succeeded`.  The receiver actually
   // implements the join by waiting for all the `JoinKeyParts` and then performing its own join on
   // them, then going back and answering all the join requests afterwards.
-  inline bool getSucceeded() const;
 
+  inline bool hasCap() const;
+  inline ::capnp::AnyPointer::Reader getCap() const;
   // One of the JoinResults will have a non-null `cap` which is the joined capability.
   //
   // TODO(cleanup):  Change `AnyPointer` to `Capability` when that is supported.
-  inline bool hasCap() const;
-  inline ::capnp::AnyPointer::Reader getCap() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -610,22 +610,22 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
-  // Matches `JoinKeyPart`.
   inline  ::uint32_t getJoinId();
   inline void setJoinId( ::uint32_t value);
+  // Matches `JoinKeyPart`.
 
+  inline bool getSucceeded();
+  inline void setSucceeded(bool value);
   // All JoinResults in the set will have the same value for `succeeded`.  The receiver actually
   // implements the join by waiting for all the `JoinKeyParts` and then performing its own join on
   // them, then going back and answering all the join requests afterwards.
-  inline bool getSucceeded();
-  inline void setSucceeded(bool value);
 
-  // One of the JoinResults will have a non-null `cap` which is the joined capability.
-  //
-  // TODO(cleanup):  Change `AnyPointer` to `Capability` when that is supported.
   inline bool hasCap();
   inline ::capnp::AnyPointer::Builder getCap();
   inline ::capnp::AnyPointer::Builder initCap();
+  // One of the JoinResults will have a non-null `cap` which is the joined capability.
+  //
+  // TODO(cleanup):  Change `AnyPointer` to `Capability` when that is supported.
 
 private:
   ::capnp::_::StructBuilder _builder;
