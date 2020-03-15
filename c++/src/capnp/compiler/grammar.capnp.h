@@ -92,6 +92,8 @@ struct LocatedFloat {
 };
 
 struct Expression {
+  // An expression. May evaluate to a type, a value, or a declaration (i.e. some named thing which
+  // is neither a type nor a value, like an annotation declaration).
   Expression() = delete;
 
   class Reader;
@@ -145,6 +147,7 @@ struct Expression::Param {
 };
 
 struct Expression::Application {
+  // Application of a function to some parameters, e.g. "foo(bar, baz)".
   Application() = delete;
 
   class Reader;
@@ -160,6 +163,7 @@ struct Expression::Application {
 };
 
 struct Expression::Member {
+  // A named member of an aggregate, e.g. "foo.bar".
   Member() = delete;
 
   class Reader;
@@ -175,6 +179,7 @@ struct Expression::Member {
 };
 
 struct Declaration {
+  // A declaration statement.
   Declaration() = delete;
 
   class Reader;
@@ -287,6 +292,7 @@ struct Declaration::AnnotationApplication::Value {
 };
 
 struct Declaration::ParamList {
+  // A list of method parameters or method returns.
   ParamList() = delete;
 
   class Reader;
@@ -789,6 +795,7 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  // e.g. parse error; downstream should ignore
   inline bool isUnknown() const;
   inline  ::capnp::Void getUnknown() const;
 
@@ -805,14 +812,20 @@ public:
   inline bool hasString() const;
   inline  ::capnp::Text::Reader getString() const;
 
+  // Just an identifier.
   inline bool isRelativeName() const;
   inline bool hasRelativeName() const;
   inline  ::capnp::compiler::LocatedText::Reader getRelativeName() const;
 
+  // Bracketed list; members are never named.
   inline bool isList() const;
   inline bool hasList() const;
   inline  ::capnp::List< ::capnp::compiler::Expression,  ::capnp::Kind::STRUCT>::Reader getList() const;
 
+  // Parenthesized list, possibly with named members.
+  //
+  // Note that a parenthesized list with one unnamed member is just a parenthesized expression,
+  // not a tuple, and so will never be represented as a tuple.
   inline bool isTuple() const;
   inline bool hasTuple() const;
   inline  ::capnp::List< ::capnp::compiler::Expression::Param,  ::capnp::Kind::STRUCT>::Reader getTuple() const;
@@ -831,14 +844,17 @@ public:
   inline bool isMember() const;
   inline typename Member::Reader getMember() const;
 
+  // An identifier with leading '.'.
   inline bool isAbsoluteName() const;
   inline bool hasAbsoluteName() const;
   inline  ::capnp::compiler::LocatedText::Reader getAbsoluteName() const;
 
+  // An import directive.
   inline bool isImport() const;
   inline bool hasImport() const;
   inline  ::capnp::compiler::LocatedText::Reader getImport() const;
 
+  // An embed directive.
   inline bool isEmbed() const;
   inline bool hasEmbed() const;
   inline  ::capnp::compiler::LocatedText::Reader getEmbed() const;
@@ -872,6 +888,7 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  // e.g. parse error; downstream should ignore
   inline bool isUnknown();
   inline  ::capnp::Void getUnknown();
   inline void setUnknown( ::capnp::Void value = ::capnp::VOID);
@@ -896,6 +913,7 @@ public:
   inline void adoptString(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownString();
 
+  // Just an identifier.
   inline bool isRelativeName();
   inline bool hasRelativeName();
   inline  ::capnp::compiler::LocatedText::Builder getRelativeName();
@@ -904,6 +922,7 @@ public:
   inline void adoptRelativeName(::capnp::Orphan< ::capnp::compiler::LocatedText>&& value);
   inline ::capnp::Orphan< ::capnp::compiler::LocatedText> disownRelativeName();
 
+  // Bracketed list; members are never named.
   inline bool isList();
   inline bool hasList();
   inline  ::capnp::List< ::capnp::compiler::Expression,  ::capnp::Kind::STRUCT>::Builder getList();
@@ -912,6 +931,10 @@ public:
   inline void adoptList(::capnp::Orphan< ::capnp::List< ::capnp::compiler::Expression,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::compiler::Expression,  ::capnp::Kind::STRUCT>> disownList();
 
+  // Parenthesized list, possibly with named members.
+  //
+  // Note that a parenthesized list with one unnamed member is just a parenthesized expression,
+  // not a tuple, and so will never be represented as a tuple.
   inline bool isTuple();
   inline bool hasTuple();
   inline  ::capnp::List< ::capnp::compiler::Expression::Param,  ::capnp::Kind::STRUCT>::Builder getTuple();
@@ -942,6 +965,7 @@ public:
   inline typename Member::Builder getMember();
   inline typename Member::Builder initMember();
 
+  // An identifier with leading '.'.
   inline bool isAbsoluteName();
   inline bool hasAbsoluteName();
   inline  ::capnp::compiler::LocatedText::Builder getAbsoluteName();
@@ -950,6 +974,7 @@ public:
   inline void adoptAbsoluteName(::capnp::Orphan< ::capnp::compiler::LocatedText>&& value);
   inline ::capnp::Orphan< ::capnp::compiler::LocatedText> disownAbsoluteName();
 
+  // An import directive.
   inline bool isImport();
   inline bool hasImport();
   inline  ::capnp::compiler::LocatedText::Builder getImport();
@@ -958,6 +983,7 @@ public:
   inline void adoptImport(::capnp::Orphan< ::capnp::compiler::LocatedText>&& value);
   inline ::capnp::Orphan< ::capnp::compiler::LocatedText> disownImport();
 
+  // An embed directive.
   inline bool isEmbed();
   inline bool hasEmbed();
   inline  ::capnp::compiler::LocatedText::Builder getEmbed();
@@ -1010,9 +1036,11 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  // Just a value.
   inline bool isUnnamed() const;
   inline  ::capnp::Void getUnnamed() const;
 
+  // "name = value"
   inline bool isNamed() const;
   inline bool hasNamed() const;
   inline  ::capnp::compiler::LocatedText::Reader getNamed() const;
@@ -1049,10 +1077,12 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  // Just a value.
   inline bool isUnnamed();
   inline  ::capnp::Void getUnnamed();
   inline void setUnnamed( ::capnp::Void value = ::capnp::VOID);
 
+  // "name = value"
   inline bool isNamed();
   inline bool hasNamed();
   inline  ::capnp::compiler::LocatedText::Builder getNamed();
@@ -1356,6 +1386,7 @@ public:
   inline bool hasNakedId() const;
   inline  ::capnp::compiler::LocatedInteger::Reader getNakedId() const;
 
+  // A floating UID or annotation (allowed at the file top level).
   inline bool isNakedAnnotation() const;
   inline bool hasNakedAnnotation() const;
   inline  ::capnp::compiler::Declaration::AnnotationApplication::Reader getNakedAnnotation() const;
@@ -1405,12 +1436,14 @@ public:
   inline bool isBuiltinList() const;
   inline  ::capnp::Void getBuiltinList() const;
 
+  // only for "renamed to AnyPointer" error message
   inline bool isBuiltinObject() const;
   inline  ::capnp::Void getBuiltinObject() const;
 
   inline bool isBuiltinAnyPointer() const;
   inline  ::capnp::Void getBuiltinAnyPointer() const;
 
+  // If this node is parameterized (generic), the list of parameters. Empty for non-generic types.
   inline bool hasParameters() const;
   inline  ::capnp::List< ::capnp::compiler::Declaration::BrandParameter,  ::capnp::Kind::STRUCT>::Reader getParameters() const;
 
@@ -1545,6 +1578,7 @@ public:
   inline void adoptNakedId(::capnp::Orphan< ::capnp::compiler::LocatedInteger>&& value);
   inline ::capnp::Orphan< ::capnp::compiler::LocatedInteger> disownNakedId();
 
+  // A floating UID or annotation (allowed at the file top level).
   inline bool isNakedAnnotation();
   inline bool hasNakedAnnotation();
   inline  ::capnp::compiler::Declaration::AnnotationApplication::Builder getNakedAnnotation();
@@ -1613,6 +1647,7 @@ public:
   inline  ::capnp::Void getBuiltinList();
   inline void setBuiltinList( ::capnp::Void value = ::capnp::VOID);
 
+  // only for "renamed to AnyPointer" error message
   inline bool isBuiltinObject();
   inline  ::capnp::Void getBuiltinObject();
   inline void setBuiltinObject( ::capnp::Void value = ::capnp::VOID);
@@ -1621,6 +1656,7 @@ public:
   inline  ::capnp::Void getBuiltinAnyPointer();
   inline void setBuiltinAnyPointer( ::capnp::Void value = ::capnp::VOID);
 
+  // If this node is parameterized (generic), the list of parameters. Empty for non-generic types.
   inline bool hasParameters();
   inline  ::capnp::List< ::capnp::compiler::Declaration::BrandParameter,  ::capnp::Kind::STRUCT>::Builder getParameters();
   inline void setParameters( ::capnp::List< ::capnp::compiler::Declaration::BrandParameter,  ::capnp::Kind::STRUCT>::Reader value);
@@ -1865,6 +1901,7 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which() const;
+  // None specified; implies void value.
   inline bool isNone() const;
   inline  ::capnp::Void getNone() const;
 
@@ -1901,6 +1938,7 @@ public:
 #endif  // !CAPNP_LITE
 
   inline Which which();
+  // None specified; implies void value.
   inline bool isNone();
   inline  ::capnp::Void getNone();
   inline void setNone( ::capnp::Void value = ::capnp::VOID);
@@ -1961,6 +1999,7 @@ public:
   inline bool hasNamedList() const;
   inline  ::capnp::List< ::capnp::compiler::Declaration::Param,  ::capnp::Kind::STRUCT>::Reader getNamedList() const;
 
+  // Specified some other struct type instead of a named list.
   inline bool isType() const;
   inline bool hasType() const;
   inline  ::capnp::compiler::Expression::Reader getType() const;
@@ -1969,6 +2008,7 @@ public:
 
   inline  ::uint32_t getEndByte() const;
 
+  // The keyword "stream".
   inline bool isStream() const;
   inline  ::capnp::Void getStream() const;
 
@@ -2009,6 +2049,7 @@ public:
   inline void adoptNamedList(::capnp::Orphan< ::capnp::List< ::capnp::compiler::Declaration::Param,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::compiler::Declaration::Param,  ::capnp::Kind::STRUCT>> disownNamedList();
 
+  // Specified some other struct type instead of a named list.
   inline bool isType();
   inline bool hasType();
   inline  ::capnp::compiler::Expression::Builder getType();
@@ -2023,6 +2064,7 @@ public:
   inline  ::uint32_t getEndByte();
   inline void setEndByte( ::uint32_t value);
 
+  // The keyword "stream".
   inline bool isStream();
   inline  ::capnp::Void getStream();
   inline void setStream( ::capnp::Void value = ::capnp::VOID);
@@ -2070,6 +2112,7 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  // If null, param failed to parse.
   inline bool hasName() const;
   inline  ::capnp::compiler::LocatedText::Reader getName() const;
 
@@ -2113,6 +2156,7 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  // If null, param failed to parse.
   inline bool hasName();
   inline  ::capnp::compiler::LocatedText::Builder getName();
   inline void setName( ::capnp::compiler::LocatedText::Reader value);
@@ -2289,6 +2333,7 @@ public:
   inline bool hasUid() const;
   inline  ::capnp::compiler::LocatedInteger::Reader getUid() const;
 
+  // limited to 16 bits
   inline bool isOrdinal() const;
   inline bool hasOrdinal() const;
   inline  ::capnp::compiler::LocatedInteger::Reader getOrdinal() const;
@@ -2334,6 +2379,7 @@ public:
   inline void adoptUid(::capnp::Orphan< ::capnp::compiler::LocatedInteger>&& value);
   inline ::capnp::Orphan< ::capnp::compiler::LocatedInteger> disownUid();
 
+  // limited to 16 bits
   inline bool isOrdinal();
   inline bool hasOrdinal();
   inline  ::capnp::compiler::LocatedInteger::Builder getOrdinal();

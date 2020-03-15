@@ -70,6 +70,7 @@ struct Statement {
 };
 
 struct LexedTokens {
+  // Lexer output when asked to parse tokens that don't form statements.
   LexedTokens() = delete;
 
   class Reader;
@@ -85,6 +86,7 @@ struct LexedTokens {
 };
 
 struct LexedStatements {
+  // Lexer output when asked to parse statements.
   LexedStatements() = delete;
 
   class Reader;

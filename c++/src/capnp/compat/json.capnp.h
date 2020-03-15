@@ -158,10 +158,21 @@ public:
   inline bool hasArray() const;
   inline  ::capnp::List< ::capnp::json::Value,  ::capnp::Kind::STRUCT>::Reader getArray() const;
 
+  // Standard JSON values.
   inline bool isObject() const;
   inline bool hasObject() const;
   inline  ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>::Reader getObject() const;
 
+  // Non-standard: A "function call", applying a named function (named by a single identifier)
+  // to a parameter list. Examples:
+  //
+  //     BinData(0, "Zm9vCg==")
+  //     ISODate("2015-04-15T08:44:50.218Z")
+  //
+  // Mongo DB users will recognize the above as exactly the syntax Mongo uses to represent BSON
+  // "binary" and "date" types in text, since JSON has no analog of these. This is basically the
+  // reason this extension exists. We do NOT recommend using `call` unless you specifically need
+  // to be compatible with some silly format that uses this syntax.
   inline bool isCall() const;
   inline bool hasCall() const;
   inline  ::capnp::json::Value::Call::Reader getCall() const;
@@ -223,6 +234,7 @@ public:
   inline void adoptArray(::capnp::Orphan< ::capnp::List< ::capnp::json::Value,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::json::Value,  ::capnp::Kind::STRUCT>> disownArray();
 
+  // Standard JSON values.
   inline bool isObject();
   inline bool hasObject();
   inline  ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>::Builder getObject();
@@ -231,6 +243,16 @@ public:
   inline void adoptObject(::capnp::Orphan< ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>>&& value);
   inline ::capnp::Orphan< ::capnp::List< ::capnp::json::Value::Field,  ::capnp::Kind::STRUCT>> disownObject();
 
+  // Non-standard: A "function call", applying a named function (named by a single identifier)
+  // to a parameter list. Examples:
+  //
+  //     BinData(0, "Zm9vCg==")
+  //     ISODate("2015-04-15T08:44:50.218Z")
+  //
+  // Mongo DB users will recognize the above as exactly the syntax Mongo uses to represent BSON
+  // "binary" and "date" types in text, since JSON has no analog of these. This is basically the
+  // reason this extension exists. We do NOT recommend using `call` unless you specifically need
+  // to be compatible with some silly format that uses this syntax.
   inline bool isCall();
   inline bool hasCall();
   inline  ::capnp::json::Value::Call::Builder getCall();
@@ -465,6 +487,7 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  // Optional: Adds the given prefix to flattened field names.
   inline bool hasPrefix() const;
   inline  ::capnp::Text::Reader getPrefix() const;
 
@@ -496,6 +519,7 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  // Optional: Adds the given prefix to flattened field names.
   inline bool hasPrefix();
   inline  ::capnp::Text::Builder getPrefix();
   inline void setPrefix( ::capnp::Text::Reader value);
@@ -546,9 +570,15 @@ public:
   }
 #endif  // !CAPNP_LITE
 
+  // The name of the discriminator field. Defaults to matching the name of the union.
   inline bool hasName() const;
   inline  ::capnp::Text::Reader getName() const;
 
+  // If non-null, specifies that the union's value shall have the given field name, rather than the
+  // value's name. In this case the union's variant can only be determined by looking at the
+  // discriminant field, not by inspecting which value field is present.
+  //
+  // It is an error to use `valueName` while also declaring some variants as $flatten.
   inline bool hasValueName() const;
   inline  ::capnp::Text::Reader getValueName() const;
 
@@ -580,6 +610,7 @@ public:
   inline ::kj::StringTree toString() const { return asReader().toString(); }
 #endif  // !CAPNP_LITE
 
+  // The name of the discriminator field. Defaults to matching the name of the union.
   inline bool hasName();
   inline  ::capnp::Text::Builder getName();
   inline void setName( ::capnp::Text::Reader value);
@@ -587,6 +618,11 @@ public:
   inline void adoptName(::capnp::Orphan< ::capnp::Text>&& value);
   inline ::capnp::Orphan< ::capnp::Text> disownName();
 
+  // If non-null, specifies that the union's value shall have the given field name, rather than the
+  // value's name. In this case the union's variant can only be determined by looking at the
+  // discriminant field, not by inspecting which value field is present.
+  //
+  // It is an error to use `valueName` while also declaring some variants as $flatten.
   inline bool hasValueName();
   inline  ::capnp::Text::Builder getValueName();
   inline void setValueName( ::capnp::Text::Reader value);

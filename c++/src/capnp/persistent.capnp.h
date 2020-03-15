@@ -239,6 +239,12 @@ public:
     return typename Persistent<SturdyRef2, Owner2>::SaveParams::Reader(_reader);
   }
 
+  // Seal the SturdyRef so that it can only be restored by the specified Owner. This is meant
+  // to mitigate damage when a SturdyRef is leaked. See comments above.
+  //
+  // Leaving this value null may or may not be allowed; it is up to the realm to decide. If a
+  // realm does allow a null owner, this should indicate that anyone is allowed to restore the
+  // ref.
   inline bool hasSealFor() const;
   inline  ::capnp::ReaderFor<Owner> getSealFor() const;
 
@@ -276,6 +282,12 @@ public:
     return typename Persistent<SturdyRef2, Owner2>::SaveParams::Builder(_builder);
   }
 
+  // Seal the SturdyRef so that it can only be restored by the specified Owner. This is meant
+  // to mitigate damage when a SturdyRef is leaked. See comments above.
+  //
+  // Leaving this value null may or may not be allowed; it is up to the realm to decide. If a
+  // realm does allow a null owner, this should indicate that anyone is allowed to restore the
+  // ref.
   inline bool hasSealFor();
   inline  ::capnp::BuilderFor<Owner> getSealFor();
   inline void setSealFor( ::capnp::ReaderFor<Owner> value);

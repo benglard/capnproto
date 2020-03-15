@@ -70,6 +70,11 @@ kj::StringTree textToComment(capnp::Text::Reader text) {
 
   if (textSize > 0) {
     kj::StringPtr allComments{text.cStr(), textSize};
+
+    // This will format multi-line docComment's as:
+    // // line 1
+    // // line 2
+    // ...
     docComment = kj::strTree(
       "  // ",
       KJ_INDEX_MAP(i, c, allComments) {
@@ -77,7 +82,12 @@ kj::StringTree textToComment(capnp::Text::Reader text) {
           if (i == (textSize - 1)) {
             return kj::strTree("\n");
           } else {
-            return kj::strTree("\n  // ");
+            if (allComments[i + 1] == '\n') {
+              // this is an empty line, don't add space
+              return kj::strTree("\n  //");
+            } else {
+              return kj::strTree("\n  // ");
+            }
           }
         } else {
           return kj::strTree(c);
@@ -95,17 +105,22 @@ kj::StringTree generateDocComment(uint64_t id,
   kj::StringTree docComment{};
 
   for (auto source : sources) {
+    // Find given node
     if (source.getId() == id) {
+
+      // If a member index is given, find that member
       if (memberIndex != DEFAULT_MEMBER_INDEX) {
         size_t counter{0};
         for (auto member : source.getMembers()) {
           if (counter == memberIndex) {
+            // Generate comment for member
             docComment = textToComment(member.getDocComment());
             break;
           }
           ++counter;
         }
       } else {
+        // Generate comment for node
         docComment = textToComment(source.getDocComment());
       }
     }
@@ -1435,14 +1450,14 @@ private:
     if (kind == FieldKind::PRIMITIVE) {
       return FieldText {
         kj::strTree(
-            kj::mv(unionDiscrim.readerIsDecl),
             generateDocComment(nodeId, sources, memberIndex),
+            kj::mv(unionDiscrim.readerIsDecl),
             "  inline ", type, " get", titleCase, "() const;\n"
             "\n"),
 
         kj::strTree(
-            kj::mv(unionDiscrim.builderIsDecl),
             generateDocComment(nodeId, sources, memberIndex),
+            kj::mv(unionDiscrim.builderIsDecl),
             "  inline ", type, " get", titleCase, "();\n"
             "  inline void set", titleCase, "(", type, " value", setterDefault, ");\n"
             "\n"),
@@ -1479,19 +1494,19 @@ private:
 
       return FieldText {
         kj::strTree(
+            generateDocComment(nodeId, sources, memberIndex),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n"
-            "#if !CAPNP_LITE\n",
-            generateDocComment(nodeId, sources, memberIndex),
+            "#if !CAPNP_LITE\n"
             "  inline ", clientType, " get", titleCase, "() const;\n"
             "#endif  // !CAPNP_LITE\n"
             "\n"),
 
         kj::strTree(
+            generateDocComment(nodeId, sources, memberIndex),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n"
-            "#if !CAPNP_LITE\n",
-            generateDocComment(nodeId, sources, memberIndex),
+            "#if !CAPNP_LITE\n"
             "  inline ", clientType, " get", titleCase, "();\n"
             "  inline void set", titleCase, "(", clientType, "&& value);\n",
             "  inline void set", titleCase, "(", clientType, "& value);\n",
@@ -1568,15 +1583,15 @@ private:
     } else if (kind == FieldKind::ANY_POINTER) {
       return FieldText {
         kj::strTree(
-            kj::mv(unionDiscrim.readerIsDecl),
             generateDocComment(nodeId, sources, memberIndex),
+            kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n"
             "  inline ::capnp::AnyPointer::Reader get", titleCase, "() const;\n"
             "\n"),
 
         kj::strTree(
-            kj::mv(unionDiscrim.builderIsDecl),
             generateDocComment(nodeId, sources, memberIndex),
+            kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n"
             "  inline ::capnp::AnyPointer::Builder get", titleCase, "();\n"
             "  inline ::capnp::AnyPointer::Builder init", titleCase, "();\n"
@@ -1717,8 +1732,8 @@ private:
 
       return FieldText {
         kj::strTree(
-            kj::mv(unionDiscrim.readerIsDecl),
             generateDocComment(nodeId, sources, memberIndex),
+            kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n",
             COND(shouldExcludeInLiteMode, "#if !CAPNP_LITE\n"),
             "  inline ", readerType, " get", titleCase, "() const;\n",
@@ -1726,8 +1741,8 @@ private:
             "\n"),
 
         kj::strTree(
-            kj::mv(unionDiscrim.builderIsDecl),
             generateDocComment(nodeId, sources, memberIndex),
+            kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n",
             COND(shouldExcludeInLiteMode, "#if !CAPNP_LITE\n"),
             "  inline ", builderType, " get", titleCase, "();\n"
@@ -3128,7 +3143,7 @@ private:
           KJ_MAP(n, nodeTexts) { return kj::mv(n.readerBuilderDefs); },
           separator, "\n",
           KJ_MAP(n, nodeTexts) { return kj::mv(n.inlineMethodDefs); },
-          KJ_MAP(n, namespaceParts) { return kj::strTree("}  // namespace ", n, "\n"); }, "\n"),
+          KJ_MAP(n, namespaceParts) { return kj::strTree("}  // namespace\n"); }, "\n"),
 
       kj::strTree(
           "// Generated by Cap'n Proto compiler, DO NOT EDIT\n"
