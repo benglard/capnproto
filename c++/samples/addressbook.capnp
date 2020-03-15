@@ -25,20 +25,16 @@ using Cxx = import "/capnp/c++.capnp";
 $Cxx.namespace("addressbook");
 
 struct Person {
-  # Person is a nice struct
-  id @0 :UInt32; # Person::id is a nice field
-  name @1 :Text; # Name field
-  email @2 :Text; # Email field
-  phones @3 :List(PhoneNumber); # List of phones
-  # this is a long list of phones
+  id @0 :UInt32;
+  name @1 :Text;
+  email @2 :Text;
+  phones @3 :List(PhoneNumber);
 
   struct PhoneNumber {
-    # PhoneNumber is a nice struct
     number @0 :Text;
     type @1 :Type;
 
     enum Type {
-      # Type is a nice enum
       mobile @0;
       home @1;
       work @2;
@@ -46,7 +42,6 @@ struct Person {
   }
 
   employment :union {
-    # Employment is a nice union
     unemployed @4 :Void;
     employer @5 :Text;
     school @6 :Text;
@@ -55,8 +50,6 @@ struct Person {
   }
 }
 
-struct AddressBook { # AddressBook is a nice struct
-  # Really nice indeed!
-  # I've never known a better struct. This is a long doc comment!
+struct AddressBook {
   people @0 :List(Person);
 }
