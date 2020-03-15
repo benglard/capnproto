@@ -145,7 +145,6 @@ struct Call {
 };
 
 struct Call::SendResultsTo {
-  // Where should the return message be sent?
   SendResultsTo() = delete;
 
   class Reader;

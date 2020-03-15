@@ -64,7 +64,7 @@ static constexpr uint64_t NAMESPACE_ANNOTATION_ID = 0xb9c6f99ebf805f2cull;
 static constexpr uint64_t NAME_ANNOTATION_ID = 0xf264a779fef191ceull;
 static constexpr int64_t DEFAULT_MEMBER_INDEX = -1;
 
-kj::StringTree textToComment(capnp::Text::Reader text) {
+kj::StringTree docToCodeComment(capnp::Text::Reader text) {
   kj::StringTree docComment{};
   const auto textSize = text.size();
 
@@ -94,36 +94,6 @@ kj::StringTree textToComment(capnp::Text::Reader text) {
         }
       }
     );
-  }
-
-  return kj::mv(docComment);
-}
-
-kj::StringTree generateDocComment(uint64_t id,
-                                  capnp::List<schema::Node::SourceInfo>::Reader sources,
-                                  int64_t memberIndex = DEFAULT_MEMBER_INDEX) {
-  kj::StringTree docComment{};
-
-  for (auto source : sources) {
-    // Find given node
-    if (source.getId() == id) {
-
-      // If a member index is given, find that member
-      if (memberIndex != DEFAULT_MEMBER_INDEX) {
-        size_t counter{0};
-        for (auto member : source.getMembers()) {
-          if (counter == memberIndex) {
-            // Generate comment for member
-            docComment = textToComment(member.getDocComment());
-            break;
-          }
-          ++counter;
-        }
-      } else {
-        // Generate comment for node
-        docComment = textToComment(source.getDocComment());
-      }
-    }
   }
 
   return kj::mv(docComment);
@@ -1240,9 +1210,7 @@ private:
   };
 
   FieldText makeFieldText(kj::StringPtr scope, StructSchema::Field field,
-                          const TemplateContext& templateContext,
-                          capnp::List<schema::Node::SourceInfo>::Reader sources,
-                          size_t memberIndex, uint64_t nodeId) {
+                          const TemplateContext& templateContext) {
     auto proto = field.getProto();
     auto typeSchema = field.getType();
     auto baseName = protoName(proto);
@@ -1450,13 +1418,13 @@ private:
     if (kind == FieldKind::PRIMITIVE) {
       return FieldText {
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline ", type, " get", titleCase, "() const;\n"
             "\n"),
 
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline ", type, " get", titleCase, "();\n"
             "  inline void set", titleCase, "(", type, " value", setterDefault, ");\n"
@@ -1494,7 +1462,7 @@ private:
 
       return FieldText {
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n"
             "#if !CAPNP_LITE\n"
@@ -1503,7 +1471,7 @@ private:
             "\n"),
 
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n"
             "#if !CAPNP_LITE\n"
@@ -1583,14 +1551,14 @@ private:
     } else if (kind == FieldKind::ANY_POINTER) {
       return FieldText {
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n"
             "  inline ::capnp::AnyPointer::Reader get", titleCase, "() const;\n"
             "\n"),
 
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n"
             "  inline ::capnp::AnyPointer::Builder get", titleCase, "();\n"
@@ -1732,7 +1700,7 @@ private:
 
       return FieldText {
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.readerIsDecl),
             "  inline bool has", titleCase, "() const;\n",
             COND(shouldExcludeInLiteMode, "#if !CAPNP_LITE\n"),
@@ -1741,7 +1709,7 @@ private:
             "\n"),
 
         kj::strTree(
-            generateDocComment(nodeId, sources, memberIndex),
+            docToCodeComment(proto.getDocComment()),
             kj::mv(unionDiscrim.builderIsDecl),
             "  inline bool has", titleCase, "();\n",
             COND(shouldExcludeInLiteMode, "#if !CAPNP_LITE\n"),
@@ -2084,17 +2052,15 @@ private:
 
   StructText makeStructText(kj::StringPtr scope, kj::StringPtr name, StructSchema schema,
                             kj::Array<kj::StringTree> nestedTypeDecls,
-                            const TemplateContext& templateContext,
-                            capnp::List<schema::Node::SourceInfo>::Reader sources) {
+                            const TemplateContext& templateContext) {
     auto proto = schema.getProto();
     KJ_IF_MAYBE(annotatedName, annotationValue(proto, NAME_ANNOTATION_ID)) {
       name = annotatedName->getText();
     }
     auto fullName = kj::str(scope, name, templateContext.args());
     auto subScope = kj::str(fullName, "::");
-    auto nodeId = proto.getId();
-    auto fieldTexts = KJ_INDEX_MAP(i, f, schema.getFields()) {
-      return makeFieldText(subScope, f, templateContext, sources, i, nodeId);
+    auto fieldTexts = KJ_MAP(f, schema.getFields()) {
+      return makeFieldText(subScope, f, templateContext);
     };
 
     auto structNode = proto.getStruct();
@@ -2155,7 +2121,7 @@ private:
           templateContext.parentDecls(),
           templateContext.decl(scope == nullptr),
           "struct ", scope, name, " {\n",
-          generateDocComment(nodeId, sources),
+          docToCodeComment(proto.getDocComment()),
           "  ", name, "() = delete;\n"
           "\n"
           "  class Reader;\n"
@@ -2740,8 +2706,7 @@ private:
 
   NodeText makeNodeText(kj::StringPtr namespace_, kj::StringPtr scope,
                         kj::StringPtr name, Schema schema,
-                        const TemplateContext& parentTemplateContext,
-                        capnp::List<schema::Node::SourceInfo>::Reader sources) {
+                        const TemplateContext& parentTemplateContext) {
     // `templateContext` is something like "template <typename T>\ntemplate <typename U>\n"
     // declaring template parameters for all parent scopes.
 
@@ -2760,7 +2725,7 @@ private:
     for (auto nested: proto.getNestedNodes()) {
       nestedTexts.add(makeNodeText(
           namespace_, subScope, nested.getName(), schemaLoader.getUnbound(nested.getId()),\
-          templateContext, sources));
+          templateContext));
     };
 
     if (proto.isStruct()) {
@@ -2769,7 +2734,7 @@ private:
           nestedTexts.add(makeNodeText(
               namespace_, subScope, toTitleCase(protoName(field)),
               schemaLoader.getUnbound(field.getGroup().getTypeId()),
-              templateContext, sources));
+              templateContext));
         }
       }
     } else if (proto.isInterface()) {
@@ -2779,8 +2744,7 @@ private:
           auto paramsProto = schemaLoader.getUnbound(method.getParamStructType()).getProto();
           if (paramsProto.getScopeId() == 0) {
             nestedTexts.add(makeNodeText(namespace_, subScope,
-                toTitleCase(kj::str(protoName(method), "Params")), params, templateContext,
-                sources));
+                toTitleCase(kj::str(protoName(method), "Params")), params, templateContext));
           }
         }
         {
@@ -2788,8 +2752,7 @@ private:
           auto resultsProto = schemaLoader.getUnbound(method.getResultStructType()).getProto();
           if (resultsProto.getScopeId() == 0) {
             nestedTexts.add(makeNodeText(namespace_, subScope,
-                toTitleCase(kj::str(protoName(method), "Results")), results, templateContext,
-                sources));
+                toTitleCase(kj::str(protoName(method), "Results")), results, templateContext));
           }
         }
       }
@@ -2880,7 +2843,7 @@ private:
     NodeText top = makeNodeTextWithoutNested(
         namespace_, scope, name, schema,
         KJ_MAP(n, nestedTexts) { return kj::mv(n.outerTypeDecl); },
-        templateContext, sources);
+        templateContext);
 
     NodeText result = {
       kj::mv(top.outerTypeDecl),
@@ -2925,8 +2888,7 @@ private:
   NodeText makeNodeTextWithoutNested(kj::StringPtr namespace_, kj::StringPtr scope,
                                      kj::StringPtr name, Schema schema,
                                      kj::Array<kj::StringTree> nestedTypeDecls,
-                                     const TemplateContext& templateContext,
-                                     capnp::List<schema::Node::SourceInfo>::Reader sources) {
+                                     const TemplateContext& templateContext) {
     auto proto = schema.getProto();
     KJ_IF_MAYBE(annotatedName, annotationValue(proto, NAME_ANNOTATION_ID)) {
       name = annotatedName->getText();
@@ -2940,7 +2902,7 @@ private:
       case schema::Node::STRUCT: {
         StructText structText =
             makeStructText(scope, name, schema.asStruct(), kj::mv(nestedTypeDecls),
-                           templateContext, sources);
+                           templateContext);
 
         return NodeText {
           kj::mv(structText.outerTypeDecl),
@@ -3048,7 +3010,6 @@ private:
   };
 
   FileText makeFileText(Schema schema,
-                        capnp::List<schema::Node::SourceInfo>::Reader sources,
                         schema::CodeGeneratorRequest::RequestedFile::Reader request) {
     usedImports.clear();
 
@@ -3084,8 +3045,7 @@ private:
 
     auto nodeTexts = KJ_MAP(nested, node.getNestedNodes()) {
       return makeNodeText(namespacePrefix, "", nested.getName(),
-                          schemaLoader.getUnbound(nested.getId()), TemplateContext(),
-                          sources);
+                          schemaLoader.getUnbound(nested.getId()), TemplateContext());
     };
 
     kj::String separator = kj::str("// ", kj::repeat('=', 87), "\n");
@@ -3222,7 +3182,7 @@ private:
 
     for (auto requestedFile: request.getRequestedFiles()) {
       auto schema = schemaLoader.get(requestedFile.getId());
-      auto fileText = makeFileText(schema, request.getSourceInfo(), requestedFile);
+      auto fileText = makeFileText(schema, requestedFile);
 
       writeFile(kj::str(schema.getProto().getDisplayName(), ".h"), fileText.header);
       writeFile(kj::str(schema.getProto().getDisplayName(), ".c++"), fileText.source);

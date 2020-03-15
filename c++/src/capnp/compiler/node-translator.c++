@@ -1487,6 +1487,7 @@ void NodeTranslator::compileNode(Declaration::Reader decl, schema::Node::Builder
   di.setId(wipNode.getReader().getId());
   if (decl.hasDocComment()) {
     di.setDocComment(decl.getDocComment());
+    builder.setDocComment(decl.getDocComment());
   }
 }
 
@@ -1906,6 +1907,7 @@ private:
         builder.setCodeOrder(codeOrder);
 
         KJ_IF_MAYBE(dc, docComment) {
+          builder.setDocComment(*dc);
           builderPair.sourceInfo.setDocComment(*dc);
         }
 

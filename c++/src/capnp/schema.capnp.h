@@ -93,7 +93,7 @@ struct Node {
   struct Annotation;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(e682ab4cf923a417, 5, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(e682ab4cf923a417, 5, 7)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -174,7 +174,7 @@ struct Node::Struct {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(9ea0b19b37fb4435, 5, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(9ea0b19b37fb4435, 5, 7)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -189,7 +189,7 @@ struct Node::Enum {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(b54ab3364333f598, 5, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(b54ab3364333f598, 5, 7)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -204,7 +204,7 @@ struct Node::Interface {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(e82753cff0c2218f, 5, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(e82753cff0c2218f, 5, 7)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -219,7 +219,7 @@ struct Node::Const {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(b18aa5ac7a0d9420, 5, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(b18aa5ac7a0d9420, 5, 7)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -234,7 +234,7 @@ struct Node::Annotation {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(ec1619d4400a0290, 5, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(ec1619d4400a0290, 5, 7)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -258,7 +258,7 @@ struct Field {
   struct Ordinal;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(9aad50a41f4af45f, 3, 4)
+    CAPNP_DECLARE_STRUCT_HEADER(9aad50a41f4af45f, 3, 5)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -266,7 +266,6 @@ struct Field {
 };
 
 struct Field::Slot {
-  // A regular, non-group, non-fixed-list field.
   Slot() = delete;
 
   class Reader;
@@ -274,7 +273,7 @@ struct Field::Slot {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(c42305476bb4746f, 3, 4)
+    CAPNP_DECLARE_STRUCT_HEADER(c42305476bb4746f, 3, 5)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -282,7 +281,6 @@ struct Field::Slot {
 };
 
 struct Field::Group {
-  // A group.
   Group() = delete;
 
   class Reader;
@@ -290,7 +288,7 @@ struct Field::Group {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(cafccddb68db1d11, 3, 4)
+    CAPNP_DECLARE_STRUCT_HEADER(cafccddb68db1d11, 3, 5)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -309,7 +307,7 @@ struct Field::Ordinal {
   };
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(bb90d5c287870be6, 3, 4)
+    CAPNP_DECLARE_STRUCT_HEADER(bb90d5c287870be6, 3, 5)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -489,11 +487,6 @@ struct Type::AnyPointer {
 };
 
 struct Type::AnyPointer::Unconstrained {
-  // A regular AnyPointer.
-  //
-  // The name "unconstrained" means as opposed to constraining it to match a type parameter.
-  // In retrospect this name is probably a poor choice given that it may still be constrained
-  // to be a struct, list, or capability.
   Unconstrained() = delete;
 
   class Reader;
@@ -515,7 +508,6 @@ struct Type::AnyPointer::Unconstrained {
 };
 
 struct Type::AnyPointer::Parameter {
-  // This is actually a reference to a type parameter defined within this scope.
   Parameter() = delete;
 
   class Reader;
@@ -531,8 +523,6 @@ struct Type::AnyPointer::Parameter {
 };
 
 struct Type::AnyPointer::ImplicitMethodParameter {
-  // This is actually a reference to an implicit (generic) parameter of a method. The only
-  // legal context for this type to appear is inside Method.paramBrand or Method.resultBrand.
   ImplicitMethodParameter() = delete;
 
   class Reader;
@@ -796,6 +786,10 @@ public:
   // `parameters`.
   inline bool getIsGeneric() const;
 
+  // The top-level doc comment for the Node.
+  inline bool hasDocComment() const;
+  inline  ::capnp::Text::Reader getDocComment() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -904,6 +898,14 @@ public:
   // `parameters`.
   inline bool getIsGeneric();
   inline void setIsGeneric(bool value);
+
+  // The top-level doc comment for the Node.
+  inline bool hasDocComment();
+  inline  ::capnp::Text::Builder getDocComment();
+  inline void setDocComment( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initDocComment(unsigned int size);
+  inline void adoptDocComment(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownDocComment();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1941,6 +1943,10 @@ public:
 
   inline typename Ordinal::Reader getOrdinal() const;
 
+  // Doc comment on the field.
+  inline bool hasDocComment() const;
+  inline  ::capnp::Text::Reader getDocComment() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -2008,6 +2014,14 @@ public:
 
   inline typename Ordinal::Builder getOrdinal();
   inline typename Ordinal::Builder initOrdinal();
+
+  // Doc comment on the field.
+  inline bool hasDocComment();
+  inline  ::capnp::Text::Builder getDocComment();
+  inline void setDocComment( ::capnp::Text::Reader value);
+  inline  ::capnp::Text::Builder initDocComment(unsigned int size);
+  inline void adoptDocComment(::capnp::Orphan< ::capnp::Text>&& value);
+  inline ::capnp::Orphan< ::capnp::Text> disownDocComment();
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -4993,6 +5007,40 @@ inline void Node::Builder::setIsGeneric(bool value) {
       ::capnp::bounded<288>() * ::capnp::ELEMENTS, value);
 }
 
+inline bool Node::Reader::hasDocComment() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS).isNull();
+}
+inline bool Node::Builder::hasDocComment() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS).isNull();
+}
+inline  ::capnp::Text::Reader Node::Reader::getDocComment() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+inline  ::capnp::Text::Builder Node::Builder::getDocComment() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+inline void Node::Builder::setDocComment( ::capnp::Text::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS), value);
+}
+inline  ::capnp::Text::Builder Node::Builder::initDocComment(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS), size);
+}
+inline void Node::Builder::adoptDocComment(
+    ::capnp::Orphan< ::capnp::Text>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::capnp::Text> Node::Builder::disownDocComment() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+
 inline bool Node::Parameter::Reader::hasName() const {
   return !_reader.getPointerField(
       ::capnp::bounded<0>() * ::capnp::POINTERS).isNull();
@@ -5864,6 +5912,40 @@ inline typename Field::Ordinal::Builder Field::Builder::initOrdinal() {
   _builder.setDataField< ::uint16_t>(::capnp::bounded<6>() * ::capnp::ELEMENTS, 0);
   return typename Field::Ordinal::Builder(_builder);
 }
+inline bool Field::Reader::hasDocComment() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
+}
+inline bool Field::Builder::hasDocComment() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS).isNull();
+}
+inline  ::capnp::Text::Reader Field::Reader::getDocComment() const {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_reader.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
+}
+inline  ::capnp::Text::Builder Field::Builder::getDocComment() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::get(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
+}
+inline void Field::Builder::setDocComment( ::capnp::Text::Reader value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::set(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS), value);
+}
+inline  ::capnp::Text::Builder Field::Builder::initDocComment(unsigned int size) {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::init(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS), size);
+}
+inline void Field::Builder::adoptDocComment(
+    ::capnp::Orphan< ::capnp::Text>&& value) {
+  ::capnp::_::PointerHelpers< ::capnp::Text>::adopt(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::capnp::Text> Field::Builder::disownDocComment() {
+  return ::capnp::_::PointerHelpers< ::capnp::Text>::disown(_builder.getPointerField(
+      ::capnp::bounded<4>() * ::capnp::POINTERS));
+}
+
 inline  ::uint32_t Field::Slot::Reader::getOffset() const {
   return _reader.getDataField< ::uint32_t>(
       ::capnp::bounded<1>() * ::capnp::ELEMENTS);

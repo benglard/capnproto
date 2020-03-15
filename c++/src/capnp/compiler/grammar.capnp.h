@@ -147,7 +147,6 @@ struct Expression::Param {
 };
 
 struct Expression::Application {
-  // Application of a function to some parameters, e.g. "foo(bar, baz)".
   Application() = delete;
 
   class Reader;
@@ -163,7 +162,6 @@ struct Expression::Application {
 };
 
 struct Expression::Member {
-  // A named member of an aggregate, e.g. "foo.bar".
   Member() = delete;
 
   class Reader;

@@ -170,6 +170,9 @@ struct Node {
     }
   }
 
+  docComment @34 :Text;
+  # The top-level doc comment for the Node.
+
   struct SourceInfo {
     # Additional information about a node which is not needed at runtime, but may be useful for
     # documentation or debugging purposes. This is kept in a separate struct to make sure it
@@ -254,6 +257,9 @@ struct Field {
     # The ordinal is given here mainly just so that the original schema text can be reproduced given
     # the compiled version -- i.e. so that `capnp compile -ocapnp` can do its job.
   }
+
+  docComment @11 :Text;
+  # Doc comment on the field.
 }
 
 struct Enumerant {
