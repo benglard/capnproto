@@ -2745,9 +2745,7 @@ private:
     for (auto nested: proto.getNestedNodes()) {
       nestedTexts.add(makeNodeText(
           namespace_, subScope, nested.getName(), schemaLoader.getUnbound(nested.getId()),\
-          templateContext,
-          sources
-        ));
+          templateContext, sources));
     };
 
     if (proto.isStruct()) {
@@ -2756,9 +2754,7 @@ private:
           nestedTexts.add(makeNodeText(
               namespace_, subScope, toTitleCase(protoName(field)),
               schemaLoader.getUnbound(field.getGroup().getTypeId()),
-              templateContext,
-              sources
-            ));
+              templateContext, sources));
         }
       }
     } else if (proto.isInterface()) {
@@ -2769,8 +2765,7 @@ private:
           if (paramsProto.getScopeId() == 0) {
             nestedTexts.add(makeNodeText(namespace_, subScope,
                 toTitleCase(kj::str(protoName(method), "Params")), params, templateContext,
-                sources
-              ));
+                sources));
           }
         }
         {
@@ -2779,8 +2774,7 @@ private:
           if (resultsProto.getScopeId() == 0) {
             nestedTexts.add(makeNodeText(namespace_, subScope,
                 toTitleCase(kj::str(protoName(method), "Results")), results, templateContext,
-                sources
-              ));
+                sources));
           }
         }
       }
@@ -3076,8 +3070,7 @@ private:
     auto nodeTexts = KJ_MAP(nested, node.getNestedNodes()) {
       return makeNodeText(namespacePrefix, "", nested.getName(),
                           schemaLoader.getUnbound(nested.getId()), TemplateContext(),
-                          sources
-                        );
+                          sources);
     };
 
     kj::String separator = kj::str("// ", kj::repeat('=', 87), "\n");
